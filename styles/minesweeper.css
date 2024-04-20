@@ -1,0 +1,41 @@
+#bord {
+    margin: 20px;
+    background-color: rgba(128, 128, 128, 0.674);
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.block {
+    display: inline-block;
+    text-align: center;
+    background-color: lightgrey;
+    width: 40px;
+    height: 40px;
+    line-height: 35px;
+    border: 1px rgb(178, 178, 178) solid;
+}
+
+.hidden-block {
+    position: relative;
+    z-index: 1;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(180, 178, 178);
+    border: 3px solid rgb(221, 221, 221);
+    box-shadow: 0px 0px 8px #000;
+}
+
+.flag-icon {
+    color: red;
+    margin: 25% auto;
+}
+
+.content {
+    font-weight: bold;
+}
