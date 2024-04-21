@@ -16,8 +16,8 @@ const difficultyBlockRowAmount = {
 
 const difficultyMineAmount = {
     [DIFFICULTY_EASY]: 12,
-    [DIFFICULTY_NORMAL]: 60,
-    [DIFFICULTY_HARD]: 140
+    [DIFFICULTY_NORMAL]: 50,
+    [DIFFICULTY_HARD]: 120
 };
 
 $(function() {
