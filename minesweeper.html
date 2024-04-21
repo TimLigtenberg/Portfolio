@@ -20,20 +20,36 @@
     <script src="scripts/minesweeper.js"></script>
   </head>
   <body>
-    <main>
-        <h1>Minesweeper</h1>
-        <h2 id="timer">00:00:00</h2>
-        <br/>
-        <button id="showGamesBtn">Leaderboard</button>
-        <div id="leaderboard" style="display: none;"></div>
-        <br/>
-        <h3><span id="games-won"></span> games won.</h3>
-        <h3><span id="blocks-left"></span> blocks left.</h3>
-        <label for="difficultySelect" class="h3">Select Difficulty:</label>
-        <select id="difficultySelect" class="h3"></select>
-        <br/>
+    <header class="header">
+      <div class="header-item-container">
+        <span class="header-item-title">Timer</span>
+        <span class="header-item-value" id="timer"></span>
+      </div>
 
-        <div id="bord"></div>
+      <div class="header-item-container">
+        <span class="header-item-title">Blocks left</span>
+        <span class="header-item-value" id="blocks-left"></span>
+      </div>
+
+      <div class="header-item-container">
+        <span class="header-item-title">Difficulty</span>
+        <select class="header-item-value" id="difficultySelect" name="difficultySelect" title="Select difficulty"></select>
+      </div>
+
+      <div class="header-item-container">
+        <span class="header-item-title">Leaderboard</span>
+        <button class="header-item-value" id="showGamesBtn">Show</button>
+
+        <div id="leaderboard" style="display: none;">
+          <span class="h1"><span id="games-won"></span> games won.</span>
+          </br><hr>
+        </div>
+      </div>
+    </header>
+    
+    <main>
+      <h1 style="margin: 20px;">Minesweeper</h1>
+      <div id="bord"></div>
     </main>
 	
   </body>

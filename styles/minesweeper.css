@@ -1,3 +1,42 @@
+.header {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.header-item-title {
+    display: block;
+    font-size: 30px;
+}
+.header-item-value {
+    display: block;
+    text-align: center;
+    font-size: 25px;
+}
+#difficultySelect {
+    background-color: #333;
+    color: white;
+    border: 1px white solid;
+    padding: 5px;
+}
+#showGamesBtn {
+    background-color: #333;
+    color: white;
+    border: 1px white solid;
+    padding: 5px 10px;
+}
+#leaderboard {
+    position: absolute;
+    right: 0;
+    margin: 20px;
+    padding: 40px;
+    z-index: 10;
+    background-color: #333;
+    white-space: nowrap;
+}
+
 #bord {
     margin: 20px;
     background-color: rgba(128, 128, 128, 0.674);
@@ -58,4 +97,10 @@
 
 .content {
     font-weight: bold;
+}
+
+hr {
+    border: none !important;
+    border-top: 1px solid rgb(122, 120, 120) !important;
+    margin: 20px 0 !important;
 }

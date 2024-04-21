@@ -15,15 +15,14 @@ const difficultyBlockRowAmount = {
 };
 
 const difficultyMineAmount = {
-    [DIFFICULTY_EASY]: 1,
+    [DIFFICULTY_EASY]: 25,
     [DIFFICULTY_NORMAL]: 100,
     [DIFFICULTY_HARD]: 300
 };
 
 $(function() {
     let blocks = [];
-    // TODO: menu maken voor gegevens
-
+    
     let selectElement = document.getElementById("difficultySelect");
     DIFFICULTIES.forEach(difficulty => {
         const option = document.createElement("option");
@@ -53,7 +52,9 @@ $(function() {
     
     function initialize() {
         $('#blocks-left').text(numberBlocksLeft);
-        $("#games-won").text(localStorage.getItem('wonGames') ? JSON.parse(localStorage.getItem('wonGames')).length : 0);
+        setLeaderboard();
+        clearInterval(timerInterval);
+        $('#timer').text("00:00:00");
 
         blocks = [];
 
@@ -146,13 +147,13 @@ $(function() {
                 block.on('click', function(event) {
                     if(event.button == 0) {
                         event.preventDefault();
-                        clickBlock(blockObject.id, blockObject.type);
+                        clickBlock(blockObject.id);
                     }
                 });
 
                 block.on('contextmenu', function(event) {
                     event.preventDefault();
-                    flagBlock(blockObject.id, blockObject.type);
+                    flagBlock(blockObject.id);
                 });
     
                 bord.append(block);
@@ -162,7 +163,7 @@ $(function() {
         });
     }
     
-    function clickBlock(blockId, blockType) {
+    function clickBlock(blockId) {
         let block = $(`#block${blockId}`);
         let blockOverlayId = `blockOverlay${blockId}`;
         let blockOverlay = $(`#${blockOverlayId}`);
@@ -220,7 +221,7 @@ $(function() {
         });
     }
     
-    function flagBlock(blockId, blockType) {
+    function flagBlock(blockId) {
         let blockOverlayId = `blockOverlay${blockId}`;
         let blockOverlay = $(`#${blockOverlayId}`);
         let flag = $(`<i id="block-flag${blockOverlayId}" class="fa-solid fa-flag flag-icon"></i>`);
@@ -230,9 +231,6 @@ $(function() {
         } else {
             blockOverlay.append(flag);
         }
-        
-
-        console.log(`Flag block of type ${blockType} and id ${blockOverlayId}`);
     }
 
     function blockIsFlagged(blockOverlayId) {
@@ -292,6 +290,7 @@ $(function() {
 
     function gameWon() {
         clearInterval(timerInterval);
+        let alertText = "You won! Time: " + $('#timer').text();
         // TODO: wonGames encrypten zodat niet makkelijk aanpasbaar is
         let storeGame = {
             difficulty: difficulty,
@@ -301,18 +300,25 @@ $(function() {
         let storedGames = localStorage.getItem('wonGames');
         if (storedGames) {
             let gamesArray = JSON.parse(storedGames);
+            gamesArray = gamesArray.filter(game => game.difficulty === difficulty);
+            
+            let fastestRecord = gamesArray.sort((a, b) => a.time.localeCompare(b.time))[0];
+            if(isTimerLower(storeGame.time, fastestRecord.time)) {
+                alertText += ". It's a new personal record!";
+            }
+
             gamesArray.push(storeGame);
             localStorage.setItem('wonGames', JSON.stringify(gamesArray));
         } else {
+            alertText += ". It's a new personal record!";
             localStorage.setItem('wonGames', JSON.stringify([storeGame]));
         }
 
-        // TODO: bij nieuw record voor difficulty: weergeven
-
         $("#bord").off("click").find("*").off("click");
         
+        
         setTimeout(function() {
-            alert("You won! Time: " + $('#timer').text());
+            alert(alertText);
             location.reload();
         }, 1000);
     }
@@ -395,32 +401,52 @@ $(function() {
         return (number < 10 ? '0' : '') + number;
     }
 
-    $('#showGamesBtn').click(function() {
+    function isTimerLower(timer1, timer2) {
+        var [hours1, minutes1, seconds1] = timer1.split(':').map(Number);
+        var [hours2, minutes2, seconds2] = timer2.split(':').map(Number);
+    
+        if (hours1 < hours2) {
+            return true;
+        } else if (hours1 === hours2 && minutes1 < minutes2) {
+            return true;
+        } else if (hours1 === hours2 && minutes1 === minutes2 && seconds1 < seconds2) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function setLeaderboard() {
+        $("#games-won").text(localStorage.getItem('wonGames') ? JSON.parse(localStorage.getItem('wonGames')).length : 0);
+
         let storedGames = localStorage.getItem('wonGames');
         let gamesListDiv = $('#leaderboard');
-
         if (storedGames) {
-            if (gamesListDiv.is(':visible')) {
-                gamesListDiv.hide();
-            } else {
-                gamesListDiv.empty().show();
+            DIFFICULTIES.forEach(difficulty => {
+                let gamesArray = JSON.parse(storedGames);
+                gamesArray = gamesArray.filter(game => game.difficulty === difficulty);
+                gamesArray = gamesArray.sort((a, b) => a.time.localeCompare(b.time));
 
-                DIFFICULTIES.forEach(difficulty => {
-                    let gamesArray = JSON.parse(storedGames);
-                    gamesArray = gamesArray.filter(game => game.difficulty === difficulty);
-                    gamesArray = gamesArray.sort((a, b) => a.time.localeCompare(b.time));
-
-                    let gamesListHTML = '<ol>';
-                    gamesListHTML += `<h3>Difficulty ${difficulty}</h3>`;
-                    gamesArray.forEach(function(game){
-                        gamesListHTML += `<li>Time: ${game.time}, On: ${game.day}</li>`;
-                    });
-                    gamesListHTML += '</ol>';
-                    gamesListDiv.append(gamesListHTML);
+                let gamesListHTML = '<ol>';
+                gamesListHTML += `<h3>Difficulty ${difficulty}</h3>`;
+                gamesArray.forEach(function(game){
+                    gamesListHTML += `<li>Time: ${game.time}, On: ${game.day}</li>`;
                 });
-            }
+                gamesListHTML += '</ol>';
+                gamesListDiv.append(gamesListHTML);
+            });
         } else {
-            gamesListDiv.html('<p>No games won yet.</p>').show();
+            gamesListDiv.append('<p>No games won yet.</p>').show();
+        }
+    }
+
+    $('#showGamesBtn').click(function() {
+        let gamesListDiv = $('#leaderboard');
+
+        if (gamesListDiv.is(':visible')) {
+            gamesListDiv.hide();
+        } else {
+            gamesListDiv.show();
         }
     });
 });
