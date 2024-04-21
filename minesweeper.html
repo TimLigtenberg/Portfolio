@@ -22,9 +22,15 @@
   <body>
     <main>
         <h1>Minesweeper</h1>
+        <h2 id="timer">00:00:00</h2>
+        <br/>
+        <button id="showGamesBtn">Leaderboard</button>
+        <div id="leaderboard" style="display: none;"></div>
+        <br/>
+        <h3><span id="games-won"></span> games won.</h3>
         <h3><span id="blocks-left"></span> blocks left.</h3>
-        <label for="difficultySelect">Select Difficulty:</label>
-        <select id="difficultySelect"></select>
+        <label for="difficultySelect" class="h3">Select Difficulty:</label>
+        <select id="difficultySelect" class="h3"></select>
         <br/>
 
         <div id="bord"></div>

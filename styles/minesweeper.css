@@ -40,8 +40,26 @@
 .bomb-icon {
     color: black;
     font-size: 22px;
+    animation: bomb-animation 2s ease-in-out forwards;
+    transform-origin: center;
+    position: relative;
+}
+
+@keyframes bomb-animation {
+    0% {
+        transform: scale(1);
+        color: black;
+    }
+    100% {
+        transform: scale(1.5);
+        color: red;
+    }
 }
 
 .content {
     font-weight: bold;
+}
+
+.leaderboard ol {
+    
 }
