@@ -10,14 +10,14 @@ const BLANK = "blank";
 
 const difficultyBlockRowAmount = {
     [DIFFICULTY_EASY]: 10,
-    [DIFFICULTY_NORMAL]: 20,
+    [DIFFICULTY_NORMAL]: 15,
     [DIFFICULTY_HARD]: 30
 };
 
 const difficultyMineAmount = {
-    [DIFFICULTY_EASY]: 25,
-    [DIFFICULTY_NORMAL]: 100,
-    [DIFFICULTY_HARD]: 300
+    [DIFFICULTY_EASY]: 12,
+    [DIFFICULTY_NORMAL]: 60,
+    [DIFFICULTY_HARD]: 140
 };
 
 $(function() {
@@ -28,6 +28,14 @@ $(function() {
         const option = document.createElement("option");
         option.text = difficulty;
         option.value = difficulty;
+        let savedDifficulty = localStorage.getItem('difficulty');
+        if((savedDifficulty && savedDifficulty === difficulty)) {
+            option.selected = true;
+        } else {
+            if (difficulty === DIFFICULTIES[0]) {
+                option.selected = true;
+            }
+        }
         selectElement.add(option);
     });
     selectElement.addEventListener("change", function() {
@@ -35,11 +43,12 @@ $(function() {
         blockAmount = difficultyBlockRowAmount[difficulty];
         mineAmount = difficultyMineAmount[difficulty];
         numberBlocksLeft = blockAmount * blockAmount - mineAmount;
+        localStorage.setItem('difficulty', difficulty);
 
         initialize();
     });
-
-    let difficulty = DIFFICULTIES[0];
+    
+    let difficulty = selectElement.options[selectElement.selectedIndex].value;
     let blockAmount = difficultyBlockRowAmount[difficulty];
     let mineAmount = difficultyMineAmount[difficulty];
     let numberBlocksLeft = blockAmount * blockAmount - mineAmount;
@@ -138,7 +147,7 @@ $(function() {
                 let content = $("<span class='content'></span>");
                 let contentId = `content${blockObject.id}`;
                 content.attr("id", contentId);
-                content.css("color", blockObject.color);
+                // TODO: ""
                 content.text("-");
 
                 block.append(content);
@@ -184,6 +193,7 @@ $(function() {
 
             if(blockObject.type === NUMBER) {
                 blockContent.text(blockObject.number);
+                blockContent.css("color", blockObject.color);
                 revealBlock(blockObject);
             } else if(blockObject.type === BLANK) {
                 blockContent.css("color", "transparent");
@@ -214,7 +224,7 @@ $(function() {
                 if (block && block.type === NUMBER && block.revealed === false) {
                     $(`#block${block.id}`).css("cursor", "default");
                     $(`#blockOverlay${block.id}`).remove();
-                    $(`#content${block.id}`).text(block.number);
+                    $(`#content${block.id}`).text(block.number).css("color", block.color);
                     revealBlock(block);
                 }
             }
