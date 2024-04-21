@@ -2,6 +2,8 @@ const DIFFICULTY_EASY = "easy";
 const DIFFICULTY_NORMAL = "normal";
 const DIFFICULTY_HARD = "hard";
 
+const DIFFICULTIES = [DIFFICULTY_EASY, DIFFICULTY_NORMAL, DIFFICULTY_HARD];
+
 const MINE = "mine";
 const NUMBER = "number";
 const BLANK = "blank";
@@ -19,19 +21,36 @@ const difficultyMineAmount = {
 };
 
 $(function() {
-    // TODO: uiteindelijk automatisch laten setten
-    let difficulty = DIFFICULTY_NORMAL;
+    let blocks = [];
 
+    let selectElement = document.getElementById("difficultySelect");
+    DIFFICULTIES.forEach(difficulty => {
+        const option = document.createElement("option");
+        option.text = difficulty;
+        option.value = difficulty;
+        selectElement.add(option);
+    });
+    selectElement.addEventListener("change", function() {
+        difficulty = this.value;
+        blockAmount = difficultyBlockRowAmount[difficulty];
+        mineAmount = difficultyMineAmount[difficulty];
+        numberBlocksLeft = blockAmount * blockAmount - mineAmount;
+
+        initialize();
+    });
+
+    let difficulty = DIFFICULTIES[0];
     let blockAmount = difficultyBlockRowAmount[difficulty];
     let mineAmount = difficultyMineAmount[difficulty];
-    let blocks = [];
     let numberBlocksLeft = blockAmount * blockAmount - mineAmount;
     
     initialize();
+    
     console.log("blocks", blocks);
     
     function initialize() {
         $('#blocks-left').text(numberBlocksLeft);
+        blocks = [];
 
         for(let i = 0; i < blockAmount; i++) {
             let row = [];
@@ -64,8 +83,8 @@ $(function() {
         let minesToPlace = mineAmount;
         
         for (let i = 0; i < minesToPlace; i++) {
-            let row = Math.floor(Math.random() * (blocks.length -1));
-            let column = Math.floor(Math.random() * (blocks[0].length -1));
+            let row = Math.floor(Math.random() * (blocks.length));
+            let column = Math.floor(Math.random() * (blocks[0].length));
             let block = blocks[row][column];
             if(block.type !== MINE) {
                 block.type = MINE;
@@ -86,14 +105,18 @@ $(function() {
                 block.type = NUMBER;
                 block.number = number;
                 block.color = colorNames[number];
-            } else {
-                makeBlockBlank(block.row, block.column, block.id);
             }
+        });
+
+        filteredArray = filteredArray.filter(block => block.type === null);
+        filteredArray.forEach(block => {
+            makeBlockBlank(block.row, block.column, block.id);
         });
     }
 
     function displayBlocks() {
         let bord = $("#bord");
+        bord.empty();
 
         blocks.forEach(blockRow => {
             blockRow.forEach(blockObject => {
@@ -222,13 +245,13 @@ $(function() {
             $(`#content${block.id}`).empty().append('<i class="fa-solid fa-bomb bomb-icon"></i>');
         });
 
-        setTimeout(function() {
+        /*setTimeout(function() {
             alert("You lost!");
-        }, 0);
+        }, 0);*/
 
-        setTimeout(function() {
+        /*setTimeout(function() {
             location.reload();
-        }, 3000);
+        }, 3000);*/
     }
 
     function revealBlock(block) {
@@ -240,14 +263,14 @@ $(function() {
     function countMinesAroundBlock(block) {
         let count = 0;
 
-        let blockAbove = ((block.row - 1) > 0) ? blocks[block.row - 1][block.column] : null;
-        let blockRightAbove = ((block.row - 1) > 0 && (block.column + 1) < blocks.length) ? blocks[block.row - 1][block.column + 1] : null;
+        let blockAbove = ((block.row - 1) >= 0) ? blocks[block.row - 1][block.column] : null;
+        let blockRightAbove = ((block.row - 1) >= 0 && (block.column + 1) < blocks.length) ? blocks[block.row - 1][block.column + 1] : null;
         let blockRight = ((block.column + 1) < blocks[0].length) ? blocks[block.row][block.column + 1] : null;
         let blockRightBelow = ((block.column + 1) < blocks[0].length && (block.row + 1) < blocks.length) ? blocks[block.row + 1][block.column + 1] : null;
         let blockBelow = ((block.row + 1) < blocks.length) ? blocks[block.row + 1][block.column] : null;
-        let blockLeftBelow = ((block.row + 1) < blocks.length && (block.column - 1) > 0) ? blocks[block.row + 1][block.column - 1] : null;
-        let blockLeft = ((block.column - 1) > 0) ? blocks[block.row][block.column - 1] : null;
-        let blockLeftAbove = ((block.column - 1) > 0 && (block.row - 1) > 0) ? blocks[block.row - 1][block.column - 1] : null;
+        let blockLeftBelow = ((block.row + 1) < blocks.length && (block.column - 1) >= 0) ? blocks[block.row + 1][block.column - 1] : null;
+        let blockLeft = ((block.column - 1) >= 0) ? blocks[block.row][block.column - 1] : null;
+        let blockLeftAbove = ((block.column - 1) >= 0 && (block.row - 1) >= 0) ? blocks[block.row - 1][block.column - 1] : null;
 
         if(blockAbove && blockAbove.type === MINE) count++;
         if(blockRightAbove && blockRightAbove.type === MINE) count++;
@@ -262,76 +285,43 @@ $(function() {
     }
 
     function makeBlockBlank(row, column, group) {
-        if(blocks[row][column].type === BLANK) return;
+        if(blocks[row][column].type !== null) return;
 
-        // TODO: meerdere in een game en die mogen dus niet naast elkaar
         blocks[row][column].type = BLANK;
         blocks[row][column].blankGroup = group;
 
-        let blockAbove = ((row - 1) > 0) ? blocks[row - 1][column] : null;
-        let blockRightAbove = ((row - 1) > 0 && (column + 1) < blocks.length) ? blocks[row - 1][column + 1] : null;
+        let blockAbove = ((row - 1) >= 0) ? blocks[row - 1][column] : null;
+        let blockRightAbove = ((row - 1) >= 0 && (column + 1) < blocks.length) ? blocks[row - 1][column + 1] : null;
         let blockRight = ((column + 1) < blocks[0].length) ? blocks[row][column + 1] : null;
         let blockRightBelow = ((column + 1) < blocks[0].length && (row + 1) < blocks.length) ? blocks[row + 1][column + 1] : null;
         let blockBelow = ((row + 1) < blocks.length) ? blocks[row + 1][column] : null;
-        let blockLeftBelow = ((row + 1) < blocks.length && (column - 1) > 0) ? blocks[row + 1][column - 1] : null;
+        let blockLeftBelow = ((row + 1) < blocks.length1 && (column - 1) >= 0) ? blocks[row + 1][column - 1] : null;
         let blockLeft = ((column - 1) > 0) ? blocks[row][column - 1] : null;
-        let blockLeftAbove = ((column - 1) > 0 && (row - 1) > 0) ? blocks[row - 1][column - 1] : null;
+        let blockLeftAbove = ((column - 1) >= 0 && (row - 1) >= 0) ? blocks[row - 1][column - 1] : null;
 
-        if(blockAbove && blockAbove.type === NUMBER && blockAbove.number === 0) {
+        if(blockAbove && blockAbove.type === null && blockAbove.number === null) {
             makeBlockBlank(blockAbove.row, blockAbove.column, group);
         }
-        if(blockRightAbove && blockRightAbove.type === NUMBER && blockRightAbove.number === 0) {
+        if(blockRightAbove && blockRightAbove.type === null && blockRightAbove.number === null) {
             makeBlockBlank(blockRightAbove.row, blockRightAbove.column, group);
         }
-        if(blockRight && blockRight.type === NUMBER && blockRight.number === 0) {
+        if(blockRight && blockRight.type === null && blockRight.number === null) {
             makeBlockBlank(blockRight.row, blockRight.column, group);
         }
-        if(blockRightBelow && blockRightBelow.type === NUMBER && blockRightBelow.number === 0) {
+        if(blockRightBelow && blockRightBelow.type === null && blockRightBelow.number === null) {
             makeBlockBlank(blockRightBelow.row, blockRightBelow.column, group);
         }
-        if(blockBelow && blockBelow.type === NUMBER && blockBelow.number === 0) {
+        if(blockBelow && blockBelow.type === null && blockBelow.number === null) {
             makeBlockBlank(blockBelow.row, blockBelow.column, group);
         }
-        if(blockLeftBelow && blockLeftBelow.type === NUMBER && blockLeftBelow.number === 0) {
+        if(blockLeftBelow && blockLeftBelow.type === null && blockLeftBelow.number === null) {
             makeBlockBlank(blockLeftBelow.row, blockLeftBelow.column, group);
         }
-        if(blockLeft && blockLeft.type === NUMBER && blockLeft.number === 0) {
+        if(blockLeft && blockLeft.type === null && blockLeft.number === null) {
             makeBlockBlank(blockLeft.row, blockLeft.column, group);
         }
-        if(blockLeftAbove && blockLeftAbove.type === NUMBER && blockLeftAbove.number === 0) {
+        if(blockLeftAbove && blockLeftAbove.null && blockLeftAbove.number === null) {
             makeBlockBlank(blockLeftAbove.row, blockLeftAbove.column, group);
         }
     }
 });
-
-
-
-
-
-/*function createBlankField(group) {
-     // TODO: meerdere in een game en die mogen dus niet naast elkaar
-        let amount = Math.floor(Math.random() * (50 - 31)) + 30;
-    
-        let currentRow = Math.floor(Math.random() * (blocks.length - 1));
-        let currentCol = Math.floor(Math.random() * (blocks[0].length - 1));
-        for (let i = 0; i < amount; i++) {
-            let nextRow = currentRow;
-            let nextCol = currentCol;
-            let random = Math.floor(Math.random() * 2);
-            if (random === 0) {
-                nextRow = currentRow + (Math.random() < 0.5 ? -1 : 1);
-            } else {
-                nextCol = currentCol + (Math.random() < 0.5 ? -1 : 1);
-            }
-
-            if (nextRow > 0 && nextCol > 0 && nextRow < blocks.length && nextCol < blocks[0].length) {
-                blocks[nextRow][nextCol].type = BLANK;
-                blocks[nextRow][nextCol].blankGroup = group;
-                currentRow = nextRow;
-                currentCol = nextCol;
-                console.log("Blank field:", blocks[nextRow][nextCol]);
-            } else {
-                amount++;
-            }
-        }
-    }*/
