@@ -15,7 +15,7 @@ const difficultyBlockRowAmount = {
 };
 
 const difficultyMineAmount = {
-    [DIFFICULTY_EASY]: 25,
+    [DIFFICULTY_EASY]: 1,
     [DIFFICULTY_NORMAL]: 100,
     [DIFFICULTY_HARD]: 300
 };
@@ -184,10 +184,8 @@ $(function() {
             if(blockObject.type === NUMBER) {
                 blockContent.text(blockObject.number);
                 revealBlock(blockObject);
-                // TODO: ook hier kijken of er een BLANK block naast zit
             } else if(blockObject.type === BLANK) {
                 blockContent.css("color", "transparent");
-                revealBlock(blockObject);
                 blankBlockClicked(blockObject.blankGroup);
             } else if(blockObject.type === MINE) {
                 gameOver();
@@ -200,16 +198,25 @@ $(function() {
     }
 
     function blankBlockClicked(blankGroup) {
-        // TODO: alle blocks rondom de blank group ook zichtbaar maken.
-        blocks.forEach(row => {
-            row.forEach(block => {
-                if (block.blankGroup === blankGroup && block.revealed === false) {
+        let flattenedArray = [].concat(...blocks);
+        let filteredArray = flattenedArray.filter(block => block.blankGroup === blankGroup && block.revealed === false);
+
+        filteredArray.forEach(block => {
+            $(`#block${block.id}`).css("cursor", "default");
+            $(`#blockOverlay${block.id}`).remove();
+            $(`#content${block.id}`).css("color", "transparent");
+            revealBlock(block);
+
+            let surroundingBlocks = getSurroundingBlocks(block.row, block.column);
+            for (let key in surroundingBlocks) {
+                let block = surroundingBlocks[key];
+                if (block && block.type === NUMBER && block.revealed === false) {
                     $(`#block${block.id}`).css("cursor", "default");
                     $(`#blockOverlay${block.id}`).remove();
-                    $(`#content${block.id}`).css("color", "transparent");
+                    $(`#content${block.id}`).text(block.number);
                     revealBlock(block);
                 }
-            });
+            }
         });
     }
     
@@ -240,6 +247,28 @@ $(function() {
         }
 
         return null;
+    }
+
+    function getSurroundingBlocks(row, column) {
+        let blockAbove = ((row - 1) >= 0) ? blocks[row - 1][column] : null;
+        let blockRightAbove = ((row - 1) >= 0 && (column + 1) < blocks.length) ? blocks[row - 1][column + 1] : null;
+        let blockRight = ((column + 1) < blocks[0].length) ? blocks[row][column + 1] : null;
+        let blockRightBelow = ((column + 1) < blocks[0].length && (row + 1) < blocks.length) ? blocks[row + 1][column + 1] : null;
+        let blockBelow = ((row + 1) < blocks.length) ? blocks[row + 1][column] : null;
+        let blockLeftBelow = ((row + 1) < blocks.length && (column - 1) >= 0) ? blocks[row + 1][column - 1] : null;
+        let blockLeft = ((column - 1) >= 0) ? blocks[row][column - 1] : null;
+        let blockLeftAbove = ((column - 1) >= 0 && (row - 1) >= 0) ? blocks[row - 1][column - 1] : null;
+
+        return {
+            "blockAbove": blockAbove,
+            "blockRightAbove": blockRightAbove,
+            "blockRight": blockRight,
+            "blockRightBelow": blockRightBelow,
+            "blockBelow": blockBelow,
+            "blockLeftBelow": blockLeftBelow,
+            "blockLeft": blockLeft,
+            "blockLeftAbove": blockLeftAbove,
+        };
     }
 
     function gameOver() {
@@ -281,8 +310,11 @@ $(function() {
         // TODO: bij nieuw record voor difficulty: weergeven
 
         $("#bord").off("click").find("*").off("click");
-        alert("You won! Time: " + $('#timer').text());
-        location.reload();
+        
+        setTimeout(function() {
+            alert("You won! Time: " + $('#timer').text());
+            location.reload();
+        }, 1000);
     }
 
     function revealBlock(block) {
@@ -294,23 +326,16 @@ $(function() {
     function countMinesAroundBlock(block) {
         let count = 0;
 
-        let blockAbove = ((block.row - 1) >= 0) ? blocks[block.row - 1][block.column] : null;
-        let blockRightAbove = ((block.row - 1) >= 0 && (block.column + 1) < blocks.length) ? blocks[block.row - 1][block.column + 1] : null;
-        let blockRight = ((block.column + 1) < blocks[0].length) ? blocks[block.row][block.column + 1] : null;
-        let blockRightBelow = ((block.column + 1) < blocks[0].length && (block.row + 1) < blocks.length) ? blocks[block.row + 1][block.column + 1] : null;
-        let blockBelow = ((block.row + 1) < blocks.length) ? blocks[block.row + 1][block.column] : null;
-        let blockLeftBelow = ((block.row + 1) < blocks.length && (block.column - 1) >= 0) ? blocks[block.row + 1][block.column - 1] : null;
-        let blockLeft = ((block.column - 1) >= 0) ? blocks[block.row][block.column - 1] : null;
-        let blockLeftAbove = ((block.column - 1) >= 0 && (block.row - 1) >= 0) ? blocks[block.row - 1][block.column - 1] : null;
-
-        if(blockAbove && blockAbove.type === MINE) count++;
-        if(blockRightAbove && blockRightAbove.type === MINE) count++;
-        if(blockRight && blockRight.type === MINE) count++;
-        if(blockRightBelow && blockRightBelow.type === MINE) count++;
-        if(blockBelow && blockBelow.type === MINE) count++;
-        if(blockLeftBelow && blockLeftBelow.type === MINE) count++;
-        if(blockLeft && blockLeft.type === MINE) count++;
-        if(blockLeftAbove && blockLeftAbove.type === MINE) count++;
+        let surroundingBlocks = getSurroundingBlocks(block.row, block.column);
+        
+        if(surroundingBlocks["blockAbove"] && surroundingBlocks["blockAbove"].type === MINE) count++;
+        if(surroundingBlocks["blockRightAbove"] && surroundingBlocks["blockRightAbove"].type === MINE) count++;
+        if(surroundingBlocks["blockRight"] && surroundingBlocks["blockRight"].type === MINE) count++;
+        if(surroundingBlocks["blockRightBelow"] && surroundingBlocks["blockRightBelow"].type === MINE) count++;
+        if(surroundingBlocks["blockBelow"] && surroundingBlocks["blockBelow"].type === MINE) count++;
+        if(surroundingBlocks["blockLeftBelow"] && surroundingBlocks["blockLeftBelow"].type === MINE) count++;
+        if(surroundingBlocks["blockLeft"] && surroundingBlocks["blockLeft"].type === MINE) count++;
+        if(surroundingBlocks["blockLeftAbove"] && surroundingBlocks["blockLeftAbove"].type === MINE) count++;
 
         return count;
     }
@@ -321,14 +346,16 @@ $(function() {
         blocks[row][column].type = BLANK;
         blocks[row][column].blankGroup = group;
 
-        let blockAbove = ((row - 1) >= 0) ? blocks[row - 1][column] : null;
-        let blockRightAbove = ((row - 1) >= 0 && (column + 1) < blocks.length) ? blocks[row - 1][column + 1] : null;
-        let blockRight = ((column + 1) < blocks[0].length) ? blocks[row][column + 1] : null;
-        let blockRightBelow = ((column + 1) < blocks[0].length && (row + 1) < blocks.length) ? blocks[row + 1][column + 1] : null;
-        let blockBelow = ((row + 1) < blocks.length) ? blocks[row + 1][column] : null;
-        let blockLeftBelow = ((row + 1) < blocks.length && (column - 1) >= 0) ? blocks[row + 1][column - 1] : null;
-        let blockLeft = ((column - 1) >= 0) ? blocks[row][column - 1] : null;
-        let blockLeftAbove = ((column - 1) >= 0 && (row - 1) >= 0) ? blocks[row - 1][column - 1] : null;
+        let surroundingBlocks = getSurroundingBlocks(row, column);
+
+        let blockAbove = surroundingBlocks["blockAbove"];
+        let blockRightAbove = surroundingBlocks["blockRightAbove"];
+        let blockRight = surroundingBlocks["blockRight"];
+        let blockRightBelow = surroundingBlocks["blockRightBelow"];
+        let blockBelow = surroundingBlocks["blockBelow"];
+        let blockLeftBelow = surroundingBlocks["blockLeftBelow"];
+        let blockLeft = surroundingBlocks["blockLeft"];
+        let blockLeftAbove = surroundingBlocks["blockLeftAbove"];
 
         if(blockAbove && blockAbove.type === null && blockAbove.number === null) {
             makeBlockBlank(blockAbove.row, blockAbove.column, group);
