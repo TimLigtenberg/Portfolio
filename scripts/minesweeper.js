@@ -112,7 +112,7 @@ $(function() {
     function setBlockNumbers() {
         let flattenedArray = [].concat(...blocks);
         let filteredArray = flattenedArray.filter(block => block.type !== MINE);
-        const colorNames = ["green", "yellow", "orange", "red", "blue", "magenta", "purple", "pink"];
+        const colorNames = ["green", "#5dc729", "orange", "red", "blue", "magenta", "purple", "pink"];
 
         filteredArray.forEach(block => {
             let number = countMinesAroundBlock(block);
@@ -147,7 +147,6 @@ $(function() {
                 let content = $("<span class='content'></span>");
                 let contentId = `content${blockObject.id}`;
                 content.attr("id", contentId);
-                // TODO: ""
                 content.text("-");
 
                 block.append(content);
@@ -173,37 +172,58 @@ $(function() {
     }
     
     function clickBlock(blockId) {
-        let block = $(`#block${blockId}`);
+        let blockElement = $(`#block${blockId}`);
         let blockOverlayId = `blockOverlay${blockId}`;
-        let blockOverlay = $(`#${blockOverlayId}`);
+        let blockOverlayElement = $(`#${blockOverlayId}`);
+        let block = getBlockObject(blockId);
 
-        if(!blockIsFlagged(blockOverlayId) && blockOverlay.length > 0) {
-            blockOverlay.remove();
-            block.css("cursor", "default");
-
-            let blockObject = getBlockObject(blockId);
-            let blockContent = $(`#content${blockId}`);
-
-            // if it's the first block you click, start the timer
-            let startblockAmount = blockAmount * blockAmount - mineAmount;
-            if(numberBlocksLeft === startblockAmount) {
-                startTime = Date.now();
-                timerInterval = setInterval(updateTimer, 100);
-            }
-
-            if(blockObject.type === NUMBER) {
-                blockContent.text(blockObject.number);
-                blockContent.css("color", blockObject.color);
-                revealBlock(blockObject);
-            } else if(blockObject.type === BLANK) {
-                blockContent.css("color", "transparent");
-                blankBlockClicked(blockObject.blankGroup);
-            } else if(blockObject.type === MINE) {
-                gameOver();
-            }
-
-            if(numberBlocksLeft === 0) {
-                gameWon();
+        if(!blockIsFlagged(blockOverlayId)) {
+            if(!block.revealed) {
+                blockOverlayElement.remove();
+                blockElement.css("cursor", "default");
+    
+                let blockContent = $(`#content${blockId}`);
+    
+                // if it's the first block you click, start the timer
+                let startblockAmount = blockAmount * blockAmount - mineAmount;
+                if(numberBlocksLeft === startblockAmount) {
+                    startTime = Date.now();
+                    timerInterval = setInterval(updateTimer, 100);
+                }
+    
+                if(block.type === NUMBER) {
+                    blockContent.text(block.number);
+                    blockContent.css("color", block.color);
+                    revealBlock(block);
+                } else if(block.type === BLANK) {
+                    blockContent.css("color", "transparent");
+                    blankBlockClicked(block.blankGroup);
+                } else if(block.type === MINE) {
+                    gameOver();
+                }
+    
+                if(numberBlocksLeft === 0) {
+                    gameWon();
+                }
+            } else {
+                // clicked on a number block that's not flagged and already revealed
+                if(block.type === NUMBER) {
+                    // amount of mines next to block is equal to amount of flagged (marked as mine) blocks next to block
+                    let flagged = countFlagsAroundBlock(block);
+                    console.log("flagged", flagged);
+                    console.log("block.number", block.number);
+                    if(block.number === flagged) {
+                        // reveal all blocks that are not marked as mine
+                        let surroundingBlocks = getSurroundingBlocks(block.row, block.column);
+                        for (let key in surroundingBlocks) {
+                            let surroundingBlock = surroundingBlocks[key];
+                            if(surroundingBlock && !surroundingBlock.revealed) {
+                                console.log("click surrounding block", surroundingBlock.id);
+                                clickBlock(surroundingBlock.id);
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -294,8 +314,9 @@ $(function() {
         $("#bord").off("click").find("*").off("click");
 
         setTimeout(function() {
+            alert("Game over!\nClick OK to restart.");
             location.reload();
-        }, 3000);
+        }, 2000);
     }
 
     function gameWon() {
@@ -352,6 +373,24 @@ $(function() {
         if(surroundingBlocks["blockLeftBelow"] && surroundingBlocks["blockLeftBelow"].type === MINE) count++;
         if(surroundingBlocks["blockLeft"] && surroundingBlocks["blockLeft"].type === MINE) count++;
         if(surroundingBlocks["blockLeftAbove"] && surroundingBlocks["blockLeftAbove"].type === MINE) count++;
+
+        return count;
+    }
+
+    function countFlagsAroundBlock(block) {
+        let count = 0;
+
+        let surroundingBlocks = getSurroundingBlocks(block.row, block.column);
+
+        for (let key in surroundingBlocks) {
+            let surroundingBlock = surroundingBlocks[key];
+            if(surroundingBlock) {
+                let blockOverlayId = `blockOverlay${surroundingBlock.id}`;
+                if(blockIsFlagged(blockOverlayId)) {
+                    count++;
+                }
+            }
+        }
 
         return count;
     }
