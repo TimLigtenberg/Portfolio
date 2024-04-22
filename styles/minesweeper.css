@@ -36,7 +36,7 @@ hr {
     text-align: center;
     font-size: 25px;
 }
-#difficultySelect {
+#difficultySelect, #themeSelect {
     background-color: #333;
     color: white;
     border: 1px white solid;
@@ -73,9 +73,6 @@ hr {
     height: 40px;
     line-height: 35px;
     border: 1px rgb(178, 178, 178) solid;
-}
-
-.hidden-block {
     position: relative;
     z-index: 1;
     line-height: 35px;
@@ -88,26 +85,61 @@ hr {
     width: 100%;
     height: 100%;
     line-height: 35px;
+}
+.overlay.active {
+    background-color: rgb(143, 142, 142) !important;
+    border: 3px solid rgb(161, 161, 161) !important;
+}
+
+.block.oldschool > .overlay {
     background-color: rgba(180, 178, 178);
     border: 3px solid rgb(221, 221, 221);
     box-shadow: 0px 0px 8px #000;
 }
-.overlay.active {
-    background-color: rgb(143, 142, 142);
-    border: 3px solid rgb(161, 161, 161);
+.block.space {
+    background-color: rgb(7, 1, 23);
+    border: 1px rgb(49, 3, 87) solid !important;
+}
+.block.space > .overlay {
+    background-color: rgb(39, 2, 81);
+    background-image: url("../assets/meteor.png");
+    background-size: 100% 100%;
+}
+.block.binary {
+    border: 1px rgb(0, 99, 7) solid !important;
+    background-color: rgb(5, 165, 2) !important;
+}
+.block.binary > .overlay {
+    background-color: rgb(3, 209, 0);
+}
+.block.binary > .overlay.active {
+    background-color: rgb(38, 255, 0) !important;
+    border: none !important;
+}
+.block.binary .shield-icon {
+    color: black;
+    font-size: 25px;
+    margin-top: 7px;
 }
 
 .flag-icon {
     color: red;
 }
 
-.bomb-icon {
-    color: black;
+.bomb-icon, .bug-icon {
     font-size: 22px;
-    animation: bomb-animation 2s ease-in-out forwards;
-    transform-origin: center;
     position: relative;
 }
+.bomb-icon {
+    color: black;
+    animation: bomb-animation 2s ease-in-out forwards;
+    transform-origin: center;
+}
+.bug-icon { 
+    color: #5b2810;
+    animation: bug-animation 2s ease-in-out forwards;
+    transform-origin: center;
+}   
 
 @keyframes bomb-animation {
     0% {
@@ -118,6 +150,13 @@ hr {
         transform: scale(1.5);
         color: red;
     }
+}
+@keyframes bug-animation {
+    0% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(5deg) scale(1.1); }
+    50% { transform: rotate(-5deg) scale(1.2); }
+    75% { transform: rotate(5deg) scale(1.3); }
+    100% { transform: rotate(0deg) scale(1.4); }
 }
 
 .content {

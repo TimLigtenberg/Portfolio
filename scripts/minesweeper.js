@@ -1,8 +1,25 @@
-const DIFFICULTY_EASY = "easy";
-const DIFFICULTY_NORMAL = "normal";
-const DIFFICULTY_HARD = "hard";
+/* TODO: Andere bord vormen
+Variable Board Shapes: Move away from the traditional square grid and experiment with hexagons, triangles, or even irregular shapes.
+*/
+// TODO: Win animatie
+/* TODO: 3D bord
+3D bord, dus i.p.v. 10*10 blocks, 10*10*10. Dit bestaat al
+*/
+
+const DIFFICULTY_EASY = "Easy";
+const DIFFICULTY_NORMAL = "Normal";
+const DIFFICULTY_HARD = "Hard";
 
 const DIFFICULTIES = [DIFFICULTY_EASY, DIFFICULTY_NORMAL, DIFFICULTY_HARD];
+
+const THEME_NORMAL = "Old school";
+// TODO: mine veranderen in iets anders dat ontploft en mooier maken
+const THEME_SPACE = "Space";
+// TODO: mine veranderen in iets anders dat ontploft
+const THEME_BINARY = "Binary";
+
+const THEMES = [THEME_NORMAL, THEME_SPACE, THEME_BINARY];
+const SPECIAL_THEMES = [THEME_BINARY];
 
 const MINE = "mine";
 const NUMBER = "number";
@@ -16,7 +33,7 @@ const difficultyBlockRowAmount = {
 
 const difficultyMineAmount = {
     [DIFFICULTY_EASY]: 12,
-    [DIFFICULTY_NORMAL]: 50,
+    [DIFFICULTY_NORMAL]: 40,
     [DIFFICULTY_HARD]: 120
 };
 
@@ -24,9 +41,11 @@ const wonGamesKey = btoa('wonGames');
 
 let blocks = [];
 let difficulty;
+let theme;
 let blockAmount;
 let mineAmount;
 let numberBlocksLeft;
+let numberMinesLeft;
 let startTime;
 let timerInterval;
 
@@ -57,12 +76,22 @@ $(function() {
     
         initialize();
     });
+
+    $("#themeSelect").on("change", function() {
+        localStorage.setItem('theme', this.value);
+        if(SPECIAL_THEMES.includes(theme) || SPECIAL_THEMES.includes(this.value)) {
+            location.reload();
+        } else {
+            theme = this.value;
+            applyTheme();
+        }
+    });
 });
 
 function initialize() {
     setDifficultyAndVariables();
     
-    $('#blocks-left').text(numberBlocksLeft);
+    $('#mines-left').text(numberMinesLeft);
     setLeaderboard();
     clearInterval(timerInterval);
     $('#timer').text("00:00:00");
@@ -137,7 +166,7 @@ function displayBlocks() {
 
     blocks.forEach(blockRow => {
         blockRow.forEach(blockObject => {
-            let block = $("<div class='block hidden-block'></div>");
+            let block = $("<div class='block'></div>");
             let blockId = `block${blockObject.id}`;
             block.attr("id", blockId);
             block.css("cursor", "pointer");
@@ -184,6 +213,8 @@ function displayBlocks() {
 
         bord.append($("</br>"));
     });
+
+    applyTheme();
 }
 
 function clickBlock(blockId) {
@@ -211,6 +242,11 @@ function clickBlock(blockId) {
             if(block.type === NUMBER) {
                 blockContent.text(block.number);
                 blockContent.css("color", block.color);
+
+                if(theme === THEME_BINARY) {
+                    blockContent.text(block.number % 2);
+                    blockContent.css("color", (block.number % 2 === 0 ? "black" : "white"));
+                }
                 revealBlock(block);
             } else if(block.type === BLANK) {
                 blockContent.css("color", "transparent");
@@ -250,6 +286,12 @@ function blankBlockClicked(blankGroup) {
         $(`#block${block.id}`).css("cursor", "default");
         $(`#blockOverlay${block.id}`).remove();
         $(`#content${block.id}`).css("color", "transparent");
+
+        if(theme === THEME_BINARY) {
+            $(`#content${block.id}`).text("0");
+            $(`#content${block.id}`).css("color", "black");
+        }
+        
         revealBlock(block);
 
         let surroundingBlocks = getSurroundingBlocks(block.row, block.column);
@@ -259,6 +301,9 @@ function blankBlockClicked(blankGroup) {
                 $(`#block${block.id}`).css("cursor", "default");
                 $(`#blockOverlay${block.id}`).remove();
                 $(`#content${block.id}`).text(block.number).css("color", block.color);
+                if(theme === THEME_BINARY) {
+                    $(`#content${block.id}`).text(block.number % 2).css("color", (block.number % 2 === 0 ? "black" : "white"));
+                }
                 revealBlock(block);
             }
         }
@@ -269,12 +314,19 @@ function flagBlock(blockId) {
     let blockOverlayId = `blockOverlay${blockId}`;
     let blockOverlay = $(`#${blockOverlayId}`);
     let flag = $(`<i id="block-flag${blockOverlayId}" class="fa-solid fa-flag flag-icon"></i>`);
+    if(theme === THEME_BINARY) {
+        flag = $(`<i id="block-flag${blockOverlayId}" class="fa-solid fa-shield-halved shield-icon"></i>`);
+    }
 
     if(blockIsFlagged(blockOverlayId)) {
         $(`#block-flag${blockOverlayId}`).remove();
+        numberMinesLeft++;
     } else {
         blockOverlay.append(flag);
+        numberMinesLeft--;
     }
+
+    $('#mines-left').text(numberMinesLeft);
 }
 
 function showNeighborClocks(block) {
@@ -333,6 +385,10 @@ function gameOver() {
         $(`#blockOverlay${block.id}`).remove();
         $(`#content${block.id}`).css("color", "transparent");
         $(`#content${block.id}`).empty().append('<i class="fa-solid fa-bomb bomb-icon"></i>');
+        if(theme === THEME_BINARY) {
+            $(`#content${block.id}`).empty().append('<i class="fa-solid fa-bug bug-icon"></i>');
+        }
+        
     });
 
     $("#bord").off("click").find("*").off("click");
@@ -346,7 +402,6 @@ function gameOver() {
 function gameWon() {
     clearInterval(timerInterval);
     let alertText = "You won! Time: " + $('#timer').text();
-    // TODO: wonGames encrypten zodat niet makkelijk aanpasbaar is
     let storeGame = {
         difficulty: difficulty,
         time: $('#timer').text(),
@@ -381,7 +436,11 @@ function gameWon() {
 function revealBlock(block) {
     block.revealed = true;
     numberBlocksLeft--;
-    $('#blocks-left').text(numberBlocksLeft);
+}
+
+function applyTheme() {
+    let className = theme.replace(/\s+/g, '').toLowerCase()
+    $('.block').removeClass().addClass('block').addClass(className);
 }
 
 function countMinesAroundBlock(block) {
@@ -511,6 +570,29 @@ function setDifficultyAndVariables() {
     blockAmount = difficultyBlockRowAmount[difficulty];
     mineAmount = difficultyMineAmount[difficulty];
     numberBlocksLeft = blockAmount * blockAmount - mineAmount;
+    numberMinesLeft = mineAmount;
+
+    setThemes();
+}
+
+function setThemes() {
+    let selectElement = $("#themeSelect");
+    THEMES.forEach(themeI => {
+        const option = $('<option>');
+        option.text(themeI);
+        option.val(themeI);
+        let savedTheme = localStorage.getItem('theme');
+        if((savedTheme && savedTheme === themeI)) {
+            option.prop('selected', true);
+            theme = themeI;
+        } else if(!savedTheme) {
+            if (themeI === DIFFICULTIES[0]) {
+                option.prop('selected', true);
+                theme = themeI;
+            }
+        }
+        selectElement.append(option);
+    });
 }
 
 function setLeaderboard() {
