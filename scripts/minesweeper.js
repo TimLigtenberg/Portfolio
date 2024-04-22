@@ -31,10 +31,8 @@ let startTime;
 let timerInterval;
 
 $(function() {
-    // TODO: eerste block zorgen dat dat geen bom is
+    // TODO: uitleg boven elke functie
     initialize();
-    
-    console.log("blocks", blocks);
 
     $('#showGamesBtn').click(function() {
         let gamesListDiv = $('#leaderboard');
@@ -91,26 +89,26 @@ function initialize() {
         blocks.push(row);
     }
 
-    // setting mineAmount of mines at random places
-    placeMines();
-    // setting the numbers of the other blocks. If block is not surrounded by a mine, turn into a BLANK block
-    setBlockNumbers();
+    // fill the board with blocks. When the first block gets clicked, the mines will be placed. This because I don't want the first block clicked to be a mine.
     displayBlocks();
 }
 
-function placeMines() {
+function placeMines(blockId) {
     let minesToPlace = mineAmount;
     
     for (let i = 0; i < minesToPlace; i++) {
         let row = Math.floor(Math.random() * (blocks.length));
         let column = Math.floor(Math.random() * (blocks[0].length));
         let block = blocks[row][column];
-        if(block.type !== MINE) {
+        if(block.type !== MINE && block.id !== blockId) {
             block.type = MINE;
         } else {
             minesToPlace++;
         }
     }
+
+    // setting the numbers of the other blocks. If block is not surrounded by a mine, turn into a BLANK block
+    setBlockNumbers();
 }
 
 function setBlockNumbers() {
@@ -204,6 +202,8 @@ function clickBlock(blockId) {
             // if it's the first block you click, start the timer
             let startblockAmount = blockAmount * blockAmount - mineAmount;
             if(numberBlocksLeft === startblockAmount) {
+                // setting mines at random places
+                placeMines(blockId);
                 startTime = Date.now();
                 timerInterval = setInterval(updateTimer, 100);
             }
@@ -227,15 +227,12 @@ function clickBlock(blockId) {
             if(block.type === NUMBER) {
                 // amount of mines next to block is equal to amount of flagged (marked as mine) blocks next to block
                 let flagged = countFlagsAroundBlock(block);
-                console.log("flagged", flagged);
-                console.log("block.number", block.number);
                 if(block.number === flagged) {
                     // reveal all blocks that are not marked as mine
                     let surroundingBlocks = getSurroundingBlocks(block.row, block.column);
                     for (let key in surroundingBlocks) {
                         let surroundingBlock = surroundingBlocks[key];
                         if(surroundingBlock && !surroundingBlock.revealed) {
-                            console.log("click surrounding block", surroundingBlock.id);
                             clickBlock(surroundingBlock.id);
                         }
                     }
