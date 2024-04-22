@@ -8,6 +8,17 @@ hr {
     margin: 20px 0 !important;
 }
 
+.main {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    flex-direction: column !important;
+    margin: 30px;
+}
+.main > * {
+    display: block;
+}
+
 .header {
     background-color: #333;
     color: #fff;
@@ -80,6 +91,10 @@ hr {
     background-color: rgba(180, 178, 178);
     border: 3px solid rgb(221, 221, 221);
     box-shadow: 0px 0px 8px #000;
+}
+.overlay.active {
+    background-color: rgb(143, 142, 142);
+    border: 3px solid rgb(161, 161, 161);
 }
 
 .flag-icon {

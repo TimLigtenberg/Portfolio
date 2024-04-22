@@ -20,6 +20,8 @@ const difficultyMineAmount = {
     [DIFFICULTY_HARD]: 120
 };
 
+const wonGamesKey = btoa('wonGames');
+
 $(function() {
     let blocks = [];
     
@@ -163,13 +165,30 @@ $(function() {
                     event.preventDefault();
                     flagBlock(blockObject.id);
                 });
-    
+
+                block.on("mousedown", function(event) {
+                    if (event.which === 1) {
+                        blockOverlay.addClass('active');
+                        if(blockObject.revealed === true) {
+                            showNeighborClocks(blockObject);
+                        }
+                    }
+                });
+                
+                document.addEventListener("mouseup", function() {
+                    blockOverlay.removeClass('active');
+                });
+
                 bord.append(block);
             });
 
             bord.append($("</br>"));
         });
     }
+
+    $(document).mouseup(function() {
+        $('.overlay').removeClass('active');
+    });
     
     function clickBlock(blockId) {
         let blockElement = $(`#block${blockId}`);
@@ -263,6 +282,16 @@ $(function() {
         }
     }
 
+    function showNeighborClocks(block) {
+        let surroundingBlocks = getSurroundingBlocks(block.row, block.column);
+        for (let key in surroundingBlocks) {
+            let surroundingBlock = surroundingBlocks[key];
+            if(surroundingBlock && surroundingBlock.revealed === false && !blockIsFlagged(`blockOverlay${surroundingBlock.id}`)) {
+                $(`#blockOverlay${surroundingBlock.id}`).addClass('active');
+            }
+        }
+    }
+
     function blockIsFlagged(blockOverlayId) {
         let blockOverlay = $(`#${blockOverlayId}`);
         return blockOverlay.find(`#block-flag${blockOverlayId}`).length > 0;
@@ -328,7 +357,7 @@ $(function() {
             time: $('#timer').text(),
             day: new Date().toLocaleString()
         };
-        let storedGames = localStorage.getItem('wonGames');
+        let storedGames = localStorage.getItem(wonGamesKey);
         if (storedGames) {
             let gamesArray = JSON.parse(storedGames);
             gamesArray = gamesArray.filter(game => game.difficulty === difficulty);
@@ -339,10 +368,10 @@ $(function() {
             }
 
             gamesArray.push(storeGame);
-            localStorage.setItem('wonGames', JSON.stringify(gamesArray));
+            localStorage.setItem(wonGamesKey, JSON.stringify(gamesArray));
         } else {
             alertText += ". It's a new personal record!";
-            localStorage.setItem('wonGames', JSON.stringify([storeGame]));
+            localStorage.setItem(wonGamesKey, JSON.stringify([storeGame]));
         }
 
         $("#bord").off("click").find("*").off("click");
@@ -466,9 +495,9 @@ $(function() {
     }
 
     function setLeaderboard() {
-        $("#games-won").text(localStorage.getItem('wonGames') ? JSON.parse(localStorage.getItem('wonGames')).length : 0);
+        $("#games-won").text(localStorage.getItem(wonGamesKey) ? JSON.parse(localStorage.getItem(wonGamesKey)).length : 0);
 
-        let storedGames = localStorage.getItem('wonGames');
+        let storedGames = localStorage.getItem(wonGamesKey);
         let gamesListDiv = $('#leaderboard');
         if (storedGames) {
             DIFFICULTIES.forEach(difficulty => {
