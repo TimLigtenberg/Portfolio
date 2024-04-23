@@ -53,7 +53,7 @@ hr {
     right: 0;
     margin: 20px;
     padding: 40px;
-    z-index: 10;
+    z-index: 9;
     background-color: #333;
     white-space: nowrap;
 }
@@ -74,7 +74,6 @@ hr {
     line-height: 35px;
     border: 1px rgb(178, 178, 178) solid;
     position: relative;
-    z-index: 1;
     line-height: 35px;
 }
 
@@ -105,6 +104,10 @@ hr {
     background-image: url("../assets/meteor.png");
     background-size: 100% 100%;
 }
+.block.space > .overlay.active {
+    background-color: rgb(187, 0, 255) !important;
+    border: none !important;
+}
 .block.binary {
     border: 1px rgb(0, 99, 7) solid !important;
     background-color: rgb(5, 165, 2) !important;
@@ -117,13 +120,20 @@ hr {
     border: none !important;
 }
 .block.binary .shield-icon {
-    color: black;
+    color: rgb(79, 79, 79);
     font-size: 25px;
     margin-top: 7px;
 }
 
 .flag-icon {
     color: red;
+}
+.flag-usa-icon {
+    color: red;
+    font-size: 28px;
+    transform: rotate(-30deg);
+    margin-bottom: 27px !important;
+    text-shadow: -1px -1px 1px blue, /* Top-left shadow */ 0 0 5px blue; /* General shadow */
 }
 
 .bomb-icon, .bug-icon {
@@ -139,7 +149,15 @@ hr {
     color: #5b2810;
     animation: bug-animation 2s ease-in-out forwards;
     transform-origin: center;
-}   
+}
+.monster-icon {
+    color: #ffcc66;
+    z-index: 10 !important;
+    position: relative;
+    animation: monster-animation 2s ease-in-out forwards;
+    transform-origin: center;
+    text-shadow: 0 0 3px #000;
+}
 
 @keyframes bomb-animation {
     0% {
@@ -158,6 +176,20 @@ hr {
     75% { transform: rotate(5deg) scale(1.3); }
     100% { transform: rotate(0deg) scale(1.4); }
 }
+@keyframes monster-animation {
+    0% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(5deg) scale(1.2); }
+    50% { transform: rotate(-5deg) scale(1.5); }
+    75% { transform: rotate(5deg) scale(6); }
+    100% { transform: rotate(0deg) scale(20); }
+}
+/*
+0% { transform: rotate(0deg); width: 100%; height: 100%; }
+    25% { transform: rotate(5deg); width: 200%; height: 200%; }
+    50% { transform: rotate(-5deg); width: 300%; height: 300%; }
+    75% { transform: rotate(5deg); width: 500%; height: 500%; }
+    100% { transform: rotate(0deg); width: 700%; height: 700%; }
+    */
 
 .content {
     font-weight: bold;

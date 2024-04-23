@@ -13,9 +13,7 @@ const DIFFICULTY_HARD = "Hard";
 const DIFFICULTIES = [DIFFICULTY_EASY, DIFFICULTY_NORMAL, DIFFICULTY_HARD];
 
 const THEME_NORMAL = "Old school";
-// TODO: mine veranderen in iets anders dat ontploft en mooier maken
 const THEME_SPACE = "Space";
-// TODO: mine veranderen in iets anders dat ontploft
 const THEME_BINARY = "Binary";
 
 const THEMES = [THEME_NORMAL, THEME_SPACE, THEME_BINARY];
@@ -32,7 +30,7 @@ const difficultyBlockRowAmount = {
 };
 
 const difficultyMineAmount = {
-    [DIFFICULTY_EASY]: 12,
+    [DIFFICULTY_EASY]: 15,
     [DIFFICULTY_NORMAL]: 40,
     [DIFFICULTY_HARD]: 120
 };
@@ -51,7 +49,41 @@ let timerInterval;
 
 $(function() {
     // TODO: uitleg boven elke functie
-    initialize();
+    let selectElement = $("#difficultySelect");
+    DIFFICULTIES.forEach(difficultyI => {
+        const option = $('<option>');
+        option.text(difficultyI);
+        option.val(difficultyI);
+        let savedDifficulty = localStorage.getItem('difficulty');
+        if((savedDifficulty && savedDifficulty === difficultyI)) {
+            option.prop('selected', true);
+            difficulty = difficultyI;
+        } else if(!savedDifficulty) {
+            if (difficultyI === DIFFICULTIES[0]) {
+                option.prop('selected', true);
+                difficulty = difficultyI;
+            }
+        }
+        selectElement.append(option);
+    });
+
+    let selectthemeElement = $("#themeSelect");
+    THEMES.forEach(themeI => {
+        const option = $('<option>');
+        option.text(themeI);
+        option.val(themeI);
+        let savedTheme = localStorage.getItem('theme');
+        if((savedTheme && savedTheme === themeI)) {
+            option.prop('selected', true);
+            theme = themeI;
+        } else if(!savedTheme) {
+            if (themeI === DIFFICULTIES[0]) {
+                option.prop('selected', true);
+                theme = themeI;
+            }
+        }
+        selectthemeElement.append(option);
+    });
 
     $('#showGamesBtn').click(function() {
         let gamesListDiv = $('#leaderboard');
@@ -86,13 +118,18 @@ $(function() {
             applyTheme();
         }
     });
+
+    initialize();
+    setLeaderboard();
 });
 
 function initialize() {
-    setDifficultyAndVariables();
+    blockAmount = difficultyBlockRowAmount[difficulty];
+    mineAmount = difficultyMineAmount[difficulty];
+    numberBlocksLeft = blockAmount * blockAmount - mineAmount;
+    numberMinesLeft = mineAmount;
     
     $('#mines-left').text(numberMinesLeft);
-    setLeaderboard();
     clearInterval(timerInterval);
     $('#timer').text("00:00:00");
 
@@ -143,7 +180,10 @@ function placeMines(blockId) {
 function setBlockNumbers() {
     let flattenedArray = [].concat(...blocks);
     let filteredArray = flattenedArray.filter(block => block.type !== MINE);
-    const colorNames = ["green", "#5dc729", "orange", "red", "blue", "magenta", "purple", "pink"];
+    let colorNames = ["green", "#5dc729", "orange", "red", "blue", "magenta", "purple", "pink"];
+    if(theme === THEME_SPACE) {
+        colorNames = ["#000080", "#4682B4", "#483D8B", "purple", "#9805ce", "#800080", "#8A2BE2", "#9932CC"];
+    }
 
     filteredArray.forEach(block => {
         let number = countMinesAroundBlock(block);
@@ -316,6 +356,8 @@ function flagBlock(blockId) {
     let flag = $(`<i id="block-flag${blockOverlayId}" class="fa-solid fa-flag flag-icon"></i>`);
     if(theme === THEME_BINARY) {
         flag = $(`<i id="block-flag${blockOverlayId}" class="fa-solid fa-shield-halved shield-icon"></i>`);
+    } else if (theme === THEME_SPACE) {
+        flag = $(`<i id="block-flag${blockOverlayId}" class="fa-solid fa-flag-usa flag-usa-icon"></i>`);
     }
 
     if(blockIsFlagged(blockOverlayId)) {
@@ -387,6 +429,8 @@ function gameOver() {
         $(`#content${block.id}`).empty().append('<i class="fa-solid fa-bomb bomb-icon"></i>');
         if(theme === THEME_BINARY) {
             $(`#content${block.id}`).empty().append('<i class="fa-solid fa-bug bug-icon"></i>');
+        } else if(theme === THEME_SPACE) {
+            $(`#content${block.id}`).empty().append('<i class="fa-solid fa-spaghetti-monster-flying monster-icon"></i>');
         }
         
     });
@@ -394,8 +438,8 @@ function gameOver() {
     $("#bord").off("click").find("*").off("click");
 
     setTimeout(function() {
-        alert("Game over!\nClick OK to restart.");
-        location.reload();
+        //alert("Game over!\nClick OK to restart.");
+        //location.reload();
     }, 2000);
 }
 
@@ -410,10 +454,10 @@ function gameWon() {
     let storedGames = localStorage.getItem(wonGamesKey);
     if (storedGames) {
         let gamesArray = JSON.parse(storedGames);
-        gamesArray = gamesArray.filter(game => game.difficulty === difficulty);
+        let gamesOfDifficulty = gamesArray.filter(game => game.difficulty === difficulty);
         
-        let fastestRecord = gamesArray.sort((a, b) => a.time.localeCompare(b.time))[0];
-        if(isTimerLower(storeGame.time, fastestRecord.time)) {
+        let fastestRecord = gamesOfDifficulty.sort((a, b) => a.time.localeCompare(b.time))[0];
+        if(!fastestRecord || isTimerLower(storeGame.time, fastestRecord.time)) {
             alertText += ". It's a new personal record!";
         }
 
@@ -546,53 +590,6 @@ function isTimerLower(timer1, timer2) {
     } else {
         return false;
     }
-}
-
-function setDifficultyAndVariables() {
-    let selectElement = $("#difficultySelect");
-    DIFFICULTIES.forEach(difficultyI => {
-        const option = $('<option>');
-        option.text(difficultyI);
-        option.val(difficultyI);
-        let savedDifficulty = localStorage.getItem('difficulty');
-        if((savedDifficulty && savedDifficulty === difficultyI)) {
-            option.prop('selected', true);
-            difficulty = difficultyI;
-        } else if(!savedDifficulty) {
-            if (difficultyI === DIFFICULTIES[0]) {
-                option.prop('selected', true);
-                difficulty = difficultyI;
-            }
-        }
-        selectElement.append(option);
-    });
-
-    blockAmount = difficultyBlockRowAmount[difficulty];
-    mineAmount = difficultyMineAmount[difficulty];
-    numberBlocksLeft = blockAmount * blockAmount - mineAmount;
-    numberMinesLeft = mineAmount;
-
-    setThemes();
-}
-
-function setThemes() {
-    let selectElement = $("#themeSelect");
-    THEMES.forEach(themeI => {
-        const option = $('<option>');
-        option.text(themeI);
-        option.val(themeI);
-        let savedTheme = localStorage.getItem('theme');
-        if((savedTheme && savedTheme === themeI)) {
-            option.prop('selected', true);
-            theme = themeI;
-        } else if(!savedTheme) {
-            if (themeI === DIFFICULTIES[0]) {
-                option.prop('selected', true);
-                theme = themeI;
-            }
-        }
-        selectElement.append(option);
-    });
 }
 
 function setLeaderboard() {
