@@ -1,7 +1,6 @@
 /* TODO: Andere bord vormen
 Variable Board Shapes: Move away from the traditional square grid and experiment with hexagons, triangles, or even irregular shapes.
 */
-// TODO: Win animatie
 /* TODO: 3D bord
 3D bord, dus i.p.v. 10*10 blocks, 10*10*10. Dit bestaat al
 */
@@ -353,22 +352,24 @@ function blankBlockClicked(blankGroup) {
 function flagBlock(blockId) {
     let blockOverlayId = `blockOverlay${blockId}`;
     let blockOverlay = $(`#${blockOverlayId}`);
-    let flag = $(`<i id="block-flag${blockOverlayId}" class="fa-solid fa-flag flag-icon"></i>`);
-    if(theme === THEME_BINARY) {
-        flag = $(`<i id="block-flag${blockOverlayId}" class="fa-solid fa-shield-halved shield-icon"></i>`);
-    } else if (theme === THEME_SPACE) {
-        flag = $(`<i id="block-flag${blockOverlayId}" class="fa-solid fa-flag-usa flag-usa-icon"></i>`);
+    if(blockOverlay.length) {
+        let flag = $(`<i id="block-flag${blockOverlayId}" class="fa-solid fa-flag flag-icon"></i>`);
+        if(theme === THEME_BINARY) {
+            flag = $(`<i id="block-flag${blockOverlayId}" class="fa-solid fa-shield-halved shield-icon"></i>`);
+        } else if (theme === THEME_SPACE) {
+            flag = $(`<i id="block-flag${blockOverlayId}" class="fa-solid fa-flag-usa flag-usa-icon"></i>`);
+        }
+    
+        if(blockIsFlagged(blockOverlayId)) {
+            $(`#block-flag${blockOverlayId}`).remove();
+            numberMinesLeft++;
+        } else {
+            blockOverlay.append(flag);
+            numberMinesLeft--;
+        }
+    
+        $('#mines-left').text(numberMinesLeft);
     }
-
-    if(blockIsFlagged(blockOverlayId)) {
-        $(`#block-flag${blockOverlayId}`).remove();
-        numberMinesLeft++;
-    } else {
-        blockOverlay.append(flag);
-        numberMinesLeft--;
-    }
-
-    $('#mines-left').text(numberMinesLeft);
 }
 
 function showNeighborClocks(block) {
@@ -438,8 +439,7 @@ function gameOver() {
     $("#bord").off("click").find("*").off("click");
 
     setTimeout(function() {
-        //alert("Game over!\nClick OK to restart.");
-        //location.reload();
+        location.reload();
     }, 2000);
 }
 
@@ -469,12 +469,12 @@ function gameWon() {
     }
 
     $("#bord").off("click").find("*").off("click");
-    
+    $("body").addClass("game-won");
     
     setTimeout(function() {
-        alert(alertText);
+        alert(alertText + "\nClick OK to restart.");
         location.reload();
-    }, 1000);
+    }, 3000);
 }
 
 function revealBlock(block) {

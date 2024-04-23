@@ -7,15 +7,26 @@ hr {
     border-top: 1px solid rgb(122, 120, 120) !important;
     margin: 20px 0 !important;
 }
+body.game-won {
+    animation: win-animation 3s ease-in-out forwards;
+}
+@keyframes win-animation {
+    0% { transform: scale(1); background-color: transparent; }
+    15% { transform: scale(1.05); background-color: rgb(112, 18, 9); }
+    30% { transform: scale(1); background-color: transparent; }
+    45% { transform: scale(1.05); background-color: rgb(112, 18, 9); }
+    60% { transform: scale(1); background-color: transparent; }
+    100% { transform: scale(1); background-color: rgb(9, 112, 9); }
+}
 
-.main {
+#main {
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
     flex-direction: column !important;
     margin: 30px;
 }
-.main > * {
+#main > * {
     display: block;
 }
 
