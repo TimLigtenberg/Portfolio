@@ -96,15 +96,15 @@ body.game-won {
     height: 100%;
     line-height: 35px;
 }
-.overlay.active {
-    background-color: rgb(143, 142, 142) !important;
-    border: 3px solid rgb(161, 161, 161) !important;
-}
 
 .block.oldschool > .overlay {
     background-color: rgba(180, 178, 178);
     border: 3px solid rgb(221, 221, 221);
     box-shadow: 0px 0px 8px #000;
+}
+.block.oldschool > .overlay.active {
+    background-color: rgb(143, 142, 142) !important;
+    border: 3px solid rgb(161, 161, 161) !important;
 }
 .block.space {
     background-color: rgb(7, 1, 23);
@@ -130,10 +130,10 @@ body.game-won {
     background-color: rgb(38, 255, 0) !important;
     border: none !important;
 }
-.block.binary .shield-icon {
-    color: rgb(79, 79, 79);
-    font-size: 25px;
-    margin-top: 7px;
+.block.binary .code-icon {
+    color: black;
+    font-size: 22px;
+    margin-top: 9px;
 }
 
 .flag-icon {

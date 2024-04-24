@@ -1,7 +1,7 @@
-/* TODO: Andere bord vormen
+/* Idee: Andere bord vormen
 Variable Board Shapes: Move away from the traditional square grid and experiment with hexagons, triangles, or even irregular shapes.
 */
-/* TODO: 3D bord
+/* Idee: 3D bord
 3D bord, dus i.p.v. 10*10 blocks, 10*10*10. Dit bestaat al
 */
 
@@ -47,7 +47,6 @@ let startTime;
 let timerInterval;
 
 $(function() {
-    // TODO: uitleg boven elke functie
     let selectElement = $("#difficultySelect");
     DIFFICULTIES.forEach(difficultyI => {
         const option = $('<option>');
@@ -353,11 +352,11 @@ function flagBlock(blockId) {
     let blockOverlayId = `blockOverlay${blockId}`;
     let blockOverlay = $(`#${blockOverlayId}`);
     if(blockOverlay.length) {
-        let flag = $(`<i id="block-flag${blockOverlayId}" class="fa-solid fa-flag flag-icon"></i>`);
+        let flag = $(`<i id="block-flag${blockOverlayId}" class="fa-solid block-flag-icon fa-flag flag-icon"></i>`);
         if(theme === THEME_BINARY) {
-            flag = $(`<i id="block-flag${blockOverlayId}" class="fa-solid fa-shield-halved shield-icon"></i>`);
+            flag = $(`<i id="block-flag${blockOverlayId}" class="fa-solid block-flag-icon fa-code code-icon"></i>`);
         } else if (theme === THEME_SPACE) {
-            flag = $(`<i id="block-flag${blockOverlayId}" class="fa-solid fa-flag-usa flag-usa-icon"></i>`);
+            flag = $(`<i id="block-flag${blockOverlayId}" class="fa-solid block-flag-icon fa-flag-usa flag-usa-icon"></i>`);
         }
     
         if(blockIsFlagged(blockOverlayId)) {
@@ -485,6 +484,13 @@ function revealBlock(block) {
 function applyTheme() {
     let className = theme.replace(/\s+/g, '').toLowerCase()
     $('.block').removeClass().addClass('block').addClass(className);
+    let flagNormalClass = 'fa-solid block-flag-icon fa-flag flag-icon';
+    let flagSpaceClass = 'fa-solid block-flag-icon fa-flag-usa flag-usa-icon';
+    if(theme === THEME_NORMAL) {
+        $('.block-flag-icon').removeClass().addClass(flagNormalClass);
+    } else {
+        $('.block-flag-icon').removeClass().addClass(flagSpaceClass);
+    }
 }
 
 function countMinesAroundBlock(block) {
