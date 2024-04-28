@@ -52,16 +52,16 @@
     margin: 0 3px;
 }
 .cardd.card-A, .cardd.card-JOKER {
-    animation: card-rainbow 3s infinite;
+    animation: card-rainbow 5s infinite;
 }
 @keyframes card-rainbow {
-    0% { box-shadow: 0px 0px 12px red; }
-    16.66% { box-shadow: 0px 0px 12px rgb(0, 255, 145); }
-    33.33% { box-shadow: 0px 0px 12px yellow; }
-    50% { box-shadow: 0px 0px 12px rgb(0, 255, 0); }
-    66.66% { box-shadow: 0px 0px 12px blue; }
-    83.33% { box-shadow: 0px 0px 12px rgb(0, 255, 247); }
-    100% { box-shadow: 0px 0px 12px rgb(255, 0, 255); }
+    0% { box-shadow: 0px 0px 12px red; border: 2px rgb(255, 0, 0) solid; }
+    16.66% { box-shadow: 0px 0px 12px rgb(0, 255, 145); border: 2px rgb(0, 255, 145) solid; }
+    33.33% { box-shadow: 0px 0px 12px yellow; border: 2px rgb(255, 255, 0) solid; }
+    50% { box-shadow: 0px 0px 12px rgb(0, 255, 0); border: 2px rgb(0, 255, 0) solid; }
+    66.66% { box-shadow: 0px 0px 12px blue; border: 2px rgb(0, 0, 255) solid; }
+    83.33% { box-shadow: 0px 0px 12px rgb(0, 255, 247); border: 2px rgb(0, 255, 247) solid; }
+    100% { box-shadow: 0px 0px 12px rgb(255, 0, 255); border: 2px rgb(255, 0, 255) solid; }
 }
 
 .card-icon {
@@ -101,14 +101,14 @@
     width: 250px;
     font-size: 50px;
     font-weight: bold;
-    animation: rainbow 3s infinite;
+    animation: rainbow 5s infinite;
 }
 @keyframes rainbow {
-    0% { color: red; }
+    0% { color: rgb(255, 0, 0); }
     16.66% { color: rgb(0, 255, 145); }
-    33.33% { color: yellow; }
+    33.33% { color: rgb(255, 255, 0); }
     50% { color: rgb(0, 255, 0); }
-    66.66% { color: blue; }
+    66.66% { color: rgb(0, 0, 255); }
     83.33% { color: rgb(0, 255, 247); }
     100% { color: rgb(255, 0, 255); }
 }
@@ -121,4 +121,27 @@
 .bottom-right {
     bottom: 0;
     right: 0;
+}
+
+#lucky-number-container {
+    position: absolute;
+    top: 5px; /* Position 5px below the top of the viewport */
+    left: 0;
+    right: 0;
+    width: 100%;
+    text-align: center;
+    z-index: 10;
+}
+
+#lucky-number {
+    font-size: 32px;
+    font-weight: bold;
+    color: yellow;
+    text-shadow: 0px 0px 8px #000;
+    text-align: center;
+}
+#lucky-number-label {
+    font-size: 32px;
+    font-weight: bold;
+    margin-right: auto;
 }

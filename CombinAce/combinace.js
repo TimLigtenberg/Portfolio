@@ -17,6 +17,7 @@ const type_icon = {
 let handCardsDiv;
 let cardPile;
 let combinationDiv;
+let combinationPointsText;
 
 let luckyNumber;
 let cards = [];
@@ -28,14 +29,19 @@ $(function() {
     handCardsDiv = $('#hand-cards');
     cardPile = $('#card-pile');
     combinationDiv = $('#combination');
-    //rollADie({ element, numberOfDice: 2, callback});
+    combinationPointsText = $('#combination-points');
 
-    initialize();
+    //rollDice(3);
 
-    handCardsDiv.append(getCardView(deck[0]));
-    handCardsDiv.append(getCardView(deck[1]));
+    $('#lucky-number-btn').on('click', function(event) {
+        if(event.button == 0) {
+            event.preventDefault();
+            initialize();
+        }
+    });
 
     function initialize() {
+        getLuckyNumber();
         setCards(1); // TODO: 2 decks
         dealCards(15);
     }
@@ -53,6 +59,21 @@ $(function() {
     });
 });
 
+function getLuckyNumber() {
+    luckyNumber = Math.floor(Math.random() * (36 - 3 + 1)) + 3;
+    $('#lucky-number-btn').remove();
+    $('#lucky-number').text(luckyNumber);
+}
+
+function rollDice(number) {
+    let element = document.getElementById('bord');
+    rollADie({ element, numberOfDice: number, callback: rollDiceResult, delay: 6000});
+}
+
+function rollDiceResult(res) {
+    console.log("res", res);
+}
+
 function setCards(packs) {
     // for the amount of decks
     for(let i = 1; i <= packs; i++) {
@@ -62,6 +83,7 @@ function setCards(packs) {
             for(let j = 1; j <= 13; j++) {
                 let card = {
                     id: `card-${i}-${j}-${type}`,
+                    cardNumber: j,
                     deck: i,
                     type: type,
                     points: getPoints(j),
@@ -104,6 +126,7 @@ function dealCards(amount) {
         const randomIndex = Math.floor(Math.random() * cards.length);
         const dealtCard = cards.splice(randomIndex, 1)[0];
         deck.push(dealtCard);
+        handCardsDiv.append(getCardView(dealtCard));
     }
 }
 
@@ -200,7 +223,6 @@ function removeFromCombination(card) {
     });
 }
 
-// TODO: wordt gebruikt?
 function clearCombination() {
     if (combinationCards.length > 0) {
         let combinationDivChildren = combinationDiv.children();
@@ -225,33 +247,58 @@ function clearCombination() {
 
 function playCombination() {
     if(validCombination()) {
-
+        // clearCombination();
     } else {
         // TODO: melding ongeldige combinatie
     }
 }
 
-function validCombination () {
+function validCombination() {
     // user already decided value of A if it's included
     if(combinationCards.length < 3) return false;
 
-    let totalPoints = 0;
-    let jokers = 0;
+    if(validStraatje()) {
+        alert("Straatje goed!");
+    }
+    if(validxOfaKind()) {
+        alert("3/4 of a kind goed!");
+    }
+
+    return (validStraatje() || validxOfaKind());
+}
+
+function validStraatje(combinationCards, luckyNumber) {
+    if (!combinationCards || combinationCards.length < 3) return false;
+
+    combinationCards.sort((a, b) => a.cardNumber - b.cardNumber);
+    const type = combinationCards[0].type;
+    let totalPoints = combinationCards[0].points;
+
+    let sameType = true;
     combinationCards.forEach(card => {
-        if(card.type === JOKER) {
-            jokers++;
-        } else {
-            totalPoints += card.points;
-        }
+        if (card.type !== type) sameType = false;
     });
-    if(jokers > 0) {
-        // TODO: kijken welke combinatie het is, straatje of combinatie en dan bepalen welke waarde de joker krijgt
-        // totalPoints += joker points
+    if (!sameType) return false;
+
+    let i = 1;
+    while (i < combinationCards.length) {
+        if (combinationCards[i].cardNumber !== combinationCards[i - 1].cardNumber + 1) {
+            if (i === 1 && combinationCards[0].value === "A") {
+                combinationCards.push(combinationCards.shift());
+                i = 0;
+            } else if (i !== 1 && combinationCards[i - 1].cardNumber === 13 && combinationCards[i].cardNumber === 1) {
+                i++;
+            } else {
+                return false;
+            }
+        }
+        totalPoints += combinationCards[i].points;
+        i++;
     }
 
-    if(totalPoints === luckyNumber) {
-        return true;
-    }
+    return totalPoints === luckyNumber;
+}
 
-    return false;
+function validxOfaKind() {
+    if(combinationCards.length < 3) return false;
 }

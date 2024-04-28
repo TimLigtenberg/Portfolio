@@ -1,7 +1,6 @@
 VOORBEREIDING EN SPELUITLEG:
 1. Twee pakjes kaarten wordt aangeraden voor dit spel.
-2. Iedere speler gooit TWEE KEER een D8 en één D20.
-Tel de drie getallen bij elkaar op, dat is [jouw eigen getal].
+2. Iedere speler krijgt een willekeurig getal vanaf 3 t/m 36, dat is [jouw eigen getal].
 3. Iedere speler krijgt 15 kaarten.
 4. Er wordt één kaart van de pot opgelegd en daarmee begint het spel.
 De speler die begint, moet een kaart opleggen die hetzelfde soort heeft als de kaart of hetzelfde cijfer/letter.
@@ -37,6 +36,7 @@ De A kan gebruikt worden om de totale punten van je combinatie te verhogen met 1
 MAAR als je een A gebruikt in een straatje, telt deze als 12 achter de K of als 1 voor de 2
 
 ♣A + ♣2 + ♣3 = 6
+♣K + ♣A + ♣2 + ♣3 = 17
 
 GEBRUIK VAN DE JOKER (Joker is extra/missende kaart)
 De joker mag altijd ingezet worden, ook in combinaties.
@@ -46,11 +46,17 @@ De joker mag altijd ingezet worden, ook in combinaties.
 
 
 
-KAARTEN PAKKEN MET JOKER:
+KAARTEN PAKKEN:
 
-Met een 2 skip je pakken door jokers dus ga je door naar de volgende maar er komen niet 2 kaarten bij.
-Degene die pakt moet de D8 te gooien voor elke joker om te beslissen hoeveel die pakt.
-Als er 2en op zijn gelegd, worden deze erbij opgeteld.
+Als er een combinatie op is gegooid, moet de volgende speler kaarten pakken tenzij deze ook een combinatie oplegt.
+Als je moet pakken, gooi je het aantal kaarten in de combinatie aan normale dobbelstenen om te bepalen hoeveel kaarten je moet pakken.
+Als iemand bijvoorbeeld een straatje opgooit met een A om tot zijn begingetal te komen (bijv. ♦2 + ♦3 + ♦4 + ♠A), moet de volgende speler 4 dobbelstenen gooien en de som daarvan aan kaarten pakken.
+
+Als je een A of JOKER als enkele kaart opgooit, moet de volgende speler kaarten pakken.
+Met een 2 skip je pakken door jokers en A's, dus ga je door naar de volgende maar er komen geen extra kaarten bij.
+Een A, een 2 en een joker mogen altijd achter elkaar opgegooid worden totdat een speler geen kaart meer oplegt. Deze speler moet kaarten pakken.
+Degene die moet pakken, pakt 3 kaarten per opgelegde A en joker.
+Als er 2en op zijn gelegd, worden deze er niet bij opgeteld.
 
 
 
@@ -106,7 +112,8 @@ Je mag met elke niet pestkaart uitgaan. Een 2 wordt niet gezien als pestkaart. W
 
 GEBRUIK STENEN:
 
-D8 en D20: Jouw getal bepalen D8 : Bepalend hoeveel je pakt bij een joker en A
+D8 en D20: Jouw getal bepalen
+D6 : Bepalend hoeveel je pakt bij een joker en A
 
 ELIMINEREN:
 
