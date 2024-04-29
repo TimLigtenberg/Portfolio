@@ -15,23 +15,24 @@ const type_icon = {
 
 // HTML Elements
 let handCardsDiv;
-let cardPile;
+let cardPileDiv;
 let combinationDiv;
-let combinationPointsText;
+
+// { amount(int), dice(bool) }
+let drawCards = null;
 
 let luckyNumber;
+// cards in hand
 let cards = [];
 let deck = [];
-let placedCards = [];
 let combinationCards = [];
+// placed cards
+let cardPile = [];
 
 $(function() {
     handCardsDiv = $('#hand-cards');
-    cardPile = $('#card-pile');
+    cardPileDiv = $('#card-pile');
     combinationDiv = $('#combination');
-    combinationPointsText = $('#combination-points');
-
-    //rollDice(3);
 
     $('#lucky-number-btn').on('click', function(event) {
         if(event.button == 0) {
@@ -57,6 +58,26 @@ $(function() {
         // Your onclick event handler code here
         console.log("a");
     });
+
+    $("#draw-card-btn").on('click', function(event) {
+        if(drawCards === null && event.button == 0) {
+            event.preventDefault();
+            dealCards(1);
+        }
+    });
+
+    $("#draw-cards-btn").on('click', function(event) {
+        if(drawCards && event.button == 0) {
+            event.preventDefault();
+            if(drawCards.dice) {
+                rollDiceToDraw(drawCards.amount);
+            } else {
+                dealCards(drawCards.amount);
+            }
+
+            drawCards = null;
+        }
+    });
 });
 
 function getLuckyNumber() {
@@ -65,13 +86,18 @@ function getLuckyNumber() {
     $('#lucky-number').text(luckyNumber);
 }
 
-function rollDice(number) {
+function rollDiceToDraw(number) {
     let element = document.getElementById('bord');
     rollADie({ element, numberOfDice: number, callback: rollDiceResult, delay: 6000});
 }
 
 function rollDiceResult(res) {
-    console.log("res", res);
+    let amount = res.reduce(function(a, b){
+        return a + b;
+    }, 0);
+
+    console.log("aantal pakken:", amount);
+    dealCards(amount);
 }
 
 function setCards(packs) {
@@ -90,12 +116,12 @@ function setCards(packs) {
                     value: getValue(j),
                 }
 
-                cards.push(card);
+                deck.push(card);
             }
         });
 
-        cards.push({ id: `card-${i}-${1}-joker`, type: JOKER, points: null, value: JOKER.toUpperCase() });
-        cards.push({ id: `card-${i}-${2}-joker`, type: JOKER, points: null, value: JOKER.toUpperCase() });
+        deck.push({ id: `card-${i}-${1}-joker`, type: JOKER, points: null, value: JOKER.toUpperCase() });
+        deck.push({ id: `card-${i}-${2}-joker`, type: JOKER, points: null, value: JOKER.toUpperCase() });
     }
 
     function getPoints(num) {
@@ -118,14 +144,14 @@ function setCards(packs) {
         else return num;
     }
 
-    console.log("alle kaarten: ", cards);
+    console.log("alle kaarten: ", deck);
 }
 
-function dealCards(amount) {
+function dealCards(amount) { console.log("deal cards",amount);
     for (let i = 0; i < amount; i++) {
-        const randomIndex = Math.floor(Math.random() * cards.length);
-        const dealtCard = cards.splice(randomIndex, 1)[0];
-        deck.push(dealtCard);
+        const randomIndex = Math.floor(Math.random() * deck.length);
+        const dealtCard = deck.splice(randomIndex, 1)[0];
+        cards.push(dealtCard);
         handCardsDiv.append(getCardView(dealtCard));
     }
 }
@@ -168,13 +194,35 @@ function getCardView(card) {
     return cardView;
 }
 
-function playcard(card) { console.log("play card: ", card);
+function playcard(card, combination = false) { console.log("play card: ", card);
+    // TODO: A en JOKER pakken implementeren en 2 skippen=
+    if(!validCard(card, combination)) return;
+
+    cardPile.push(card);
     cards = cards.filter(item => item !== card);
 
-    let cardView = $(`#${card.id}`);
+    if(card.value === JOKER || card.value === "A") {
+        if(drawCards) {
+            if(combination) {
+                drawCards.amount++;
+            } else {
+                drawCards.amount += 3;
+            }
+            
+            drawCards.dice = combination;
+        } else {
+            if(combination) {
+                drawCards = { amount: 1, dice: true };
+            } else {
+                drawCards = { amount: 3, dice: false };
+            }
+        }
+    }
     
-    let randomTop = Math.floor(Math.random() * (cardPile.height() - cardView.height()));
-    let randomLeft = Math.floor(Math.random() * (cardPile.width() - cardView.width()));
+
+    let cardView = $(`#${card.id}`);
+    let randomTop = Math.floor(Math.random() * (cardPileDiv.height() - cardView.height()));
+    let randomLeft = Math.floor(Math.random() * (cardPileDiv.width() - cardView.width()));
     cardView.css({
         'position': 'absolute',
         'top': randomTop + 'px',
@@ -182,10 +230,21 @@ function playcard(card) { console.log("play card: ", card);
         'cursor': 'default'
     });
 
-    cardView.remove().appendTo(cardPile);
+    cardView.remove().appendTo(cardPileDiv);
+}
+
+function getCombinationPoints() {
+    let points = 0;
+
+    combinationCards.forEach(card => {
+        points += card.points;
+    });
+
+    return points;
 }
 
 function addToCombination(card) {
+    if(drawCards !== null) return;
     // TODO: als card een A is, kiezen welke waarde en die als card.value setten
     let cardView = $(`#${card.id}`);
     console.log("card added to combination: ", card);
@@ -193,6 +252,7 @@ function addToCombination(card) {
 
     cardView.remove().appendTo(combinationDiv);
     combinationDiv.css("display", "flex");
+    combinationDiv.attr('title', getCombinationPoints());
 
     cardView.addClass('draggable');
     cardView.on('contextmenu', function(event) {
@@ -206,6 +266,7 @@ function removeFromCombination(card) {
     combinationCards = combinationCards.filter(item => item !== card);
 
     cardView.remove().appendTo(handCardsDiv);
+    combinationDiv.attr('title', getCombinationPoints());
     if(combinationDiv.children().length === 0) {
         combinationDiv.css("display", "none");
     }
@@ -246,11 +307,30 @@ function clearCombination() {
 }
 
 function playCombination() {
+    if(drawCards !== null) return;
+
     if(validCombination()) {
-        // clearCombination();
+        combinationCards.forEach(card => {
+            playcard(card, true);
+        });
+
+        clearCombination();
     } else {
         // TODO: melding ongeldige combinatie
     }
+}
+
+function validCard(card, combination = false) {
+    // TODO: A en JOKER en 2 opleggen achter elkaar
+    if(drawCards !== null && !drawCards.dice && (card.type === JOKER || card.value === "A" || card.value === 2)) {
+        return true;
+    } else if(drawCards !== null) {
+        return false;
+    }
+
+    let lastCard = cardPile[cardPile.length - 1];
+
+    return (!lastCard || lastCard.type === card.type || lastCard.value === card.value || card.type === JOKER || card.value === "A");
 }
 
 function validCombination() {
@@ -267,7 +347,8 @@ function validCombination() {
     return (validStraatje() || validxOfaKind());
 }
 
-function validStraatje(combinationCards, luckyNumber) {
+function validStraatje() {
+    // TODO: A en JOKER implementeren
     if (!combinationCards || combinationCards.length < 3) return false;
 
     combinationCards.sort((a, b) => a.cardNumber - b.cardNumber);
@@ -300,5 +381,21 @@ function validStraatje(combinationCards, luckyNumber) {
 }
 
 function validxOfaKind() {
+    // TODO: A en JOKER implementeren
     if(combinationCards.length < 3) return false;
+
+    let pastTypes = [];
+    let sameValue = combinationCards[0].value;
+    let totalPoints = 0;
+    
+    combinationCards.forEach(card => {
+        if (card.value !== sameValue) return false;
+        else if (pastTypes.includes(card.type)) return false;
+        else {
+            pastTypes.push(card.type);
+            totalPoints += card.points;
+        }
+    });
+
+    return totalPoints === luckyNumber;
 }

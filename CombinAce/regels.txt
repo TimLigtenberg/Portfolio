@@ -7,7 +7,8 @@ De speler die begint, moet een kaart opleggen die hetzelfde soort heeft als de k
 Wanneer deze niet kan, moet hij een kaart pakken. Deze mag direct opgelegd worden als dat kan.
 5. De volgende speler doet hetzelfde.
 6. Naast een bijpassende kaart mag een speler ook een COMBINATIE* opleggen.
-7. Verdere regels van kaarten staan onder het kopje ANDERE SPECIALE KAARTEN EN REGELS.
+7. Het spel is afgelopen wanneer een speler geen kaarten meer heeft en ook geen kaarten moet pakken.
+8. Verdere regels van kaarten staan onder het kopje ANDERE SPECIALE KAARTEN EN REGELS.
 
 
 
@@ -24,7 +25,8 @@ Straatje: ♦A + ♦2 + ♦3
 3 of a kind: ♣10 + ♦10 + ♥10
 
 GEBRUIKT VAN A (A is 1 of 12)
-De A mag altijd in combinaties ingezet worden en hoeft dus niet te matchen met de combinatie.
+De A mag altijd ingezet worden.
+Als de A wordt gebruikt in combinaties, hoeft deze dus niet te matchen met de combinatie.
 Om de A in te kunnen zetten, moet de combinatie al wel kloppen en bestaan uit minimaal 2 kaarten.
 De A kan gebruikt worden om de totale punten van je combinatie te verhogen met 1 of 12 om zo tot [jouw eigen getal] te komen.
 
@@ -57,10 +59,6 @@ Met een 2 skip je pakken door jokers en A's, dus ga je door naar de volgende maa
 Een A, een 2 en een joker mogen altijd achter elkaar opgegooid worden totdat een speler geen kaart meer oplegt. Deze speler moet kaarten pakken.
 Degene die moet pakken, pakt 3 kaarten per opgelegde A en joker.
 Als er 2en op zijn gelegd, worden deze er niet bij opgeteld.
-
-
-
-WANNEER WIN JE: Wanneer je geen kaarten meer hebt en ook geen kaarten moet pakken.
 
 
 
