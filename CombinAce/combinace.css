@@ -19,7 +19,7 @@
 #combination {
     display: flex;
     position: absolute;
-    top: 30%;
+    top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 10;
@@ -159,5 +159,12 @@
     position: absolute;
     right: 10px;
     top: 50px;
+    z-index: 10;
+}
+
+#play-combination-btn {
+    position: absolute;
+    right: 10px;
+    top: 90px;
     z-index: 10;
 }

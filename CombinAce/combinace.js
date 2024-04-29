@@ -78,6 +78,13 @@ $(function() {
             drawCards = null;
         }
     });
+
+    $("#play-combination-btn").on('click', function(event) {
+        if(event.button == 0) {
+            event.preventDefault();
+            playCombination();
+        }
+    });
 });
 
 function getLuckyNumber() {
@@ -195,8 +202,7 @@ function getCardView(card) {
 }
 
 function playcard(card, combination = false) { console.log("play card: ", card);
-    // TODO: A en JOKER pakken implementeren en 2 skippen=
-    if(!validCard(card, combination)) return;
+    if(!combination && !validCard(card)) return;
 
     cardPile.push(card);
     cards = cards.filter(item => item !== card);
@@ -307,21 +313,21 @@ function clearCombination() {
 }
 
 function playCombination() {
-    if(drawCards !== null) return;
-
-    if(validCombination()) {
-        combinationCards.forEach(card => {
-            playcard(card, true);
-        });
-
-        clearCombination();
-    } else {
-        // TODO: melding ongeldige combinatie
+    if(drawCards === null || drawCards.dice === true) {
+        if(validCombination()) {
+            combinationCards.forEach(card => {
+                playcard(card, true);
+            });
+    
+            clearCombination();
+        } else {
+            alert("Geen valide combinatie. A en JOKER nog niet geimplementeerd");
+            // TODO: melding ongeldige combinatie
+        }
     }
 }
 
-function validCard(card, combination = false) {
-    // TODO: A en JOKER en 2 opleggen achter elkaar
+function validCard(card) {
     if(drawCards !== null && !drawCards.dice && (card.type === JOKER || card.value === "A" || card.value === 2)) {
         return true;
     } else if(drawCards !== null) {
