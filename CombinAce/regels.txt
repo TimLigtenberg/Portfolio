@@ -29,6 +29,7 @@ De A mag altijd ingezet worden.
 Als de A wordt gebruikt in combinaties, hoeft deze dus niet te matchen met de combinatie.
 Om de A in te kunnen zetten, moet de combinatie al wel kloppen en bestaan uit minimaal 2 kaarten.
 De A kan gebruikt worden om de totale punten van je combinatie te verhogen met 1 of 12 om zo tot [jouw eigen getal] te komen.
+Er zit geen maximum op het aantal A's dat je in een combinatie mag gebruiken.
 
 ♦2 + ♦3 + ♦4 + ♣A♦A♥A♠A = 10 of 21
 ♣5 + ♦5 + ♥5 + ♣A♦A♥A♠A = 16 of 27
@@ -42,6 +43,7 @@ MAAR als je een A gebruikt in een straatje, telt deze als 12 achter de K of als 
 
 GEBRUIK VAN DE JOKER (Joker is extra/missende kaart)
 De joker mag altijd ingezet worden, ook in combinaties.
+Er mag maar maximaal 1 joker in een combinatie zitten.
 
 ♦2 + JOKER + ♦4 = 9
 ♣10 + ♦10 + JOKER = 30

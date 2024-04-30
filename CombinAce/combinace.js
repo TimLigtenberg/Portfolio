@@ -17,6 +17,7 @@ const type_icon = {
 let handCardsDiv;
 let cardPileDiv;
 let combinationDiv;
+let drawCardsText;
 
 // { amount(int), dice(bool) }
 let drawCards = null;
@@ -30,9 +31,14 @@ let combinationCards = [];
 let cardPile = [];
 
 $(function() {
-    handCardsDiv = $('#hand-cards');
+    handCardsDiv = $('#hand-cards').sortable();
     cardPileDiv = $('#card-pile');
     combinationDiv = $('#combination');
+    drawCardsText = $('#draw-cards-amount').text(0);
+
+    $("#menu").draggable();
+    $("#lucky-number-container").draggable();
+    $("#rules-object-container").draggable();
 
     $('#lucky-number-btn').on('click', function(event) {
         if(event.button == 0) {
@@ -44,25 +50,14 @@ $(function() {
     function initialize() {
         getLuckyNumber();
         setCards(1); // TODO: 2 decks
-        dealCards(15);
+        dealCards(40); // TODO: 15 cards
     }
-
-    $(".draggable").draggable({
-        containment: combinationDiv,
-        cursor: "move",
-        snap: combinationDiv,
-        snapMode: "inner",
-        snapTolerance: 20
-    });
-    combinationDiv.on('click', '.draggable', function() {
-        // Your onclick event handler code here
-        console.log("a");
-    });
 
     $("#draw-card-btn").on('click', function(event) {
         if(drawCards === null && event.button == 0) {
             event.preventDefault();
             dealCards(1);
+            //clearCombination();
         }
     });
 
@@ -76,11 +71,12 @@ $(function() {
             }
 
             drawCards = null;
+            drawCardsText.text(0);
         }
     });
 
     $("#play-combination-btn").on('click', function(event) {
-        if(event.button == 0) {
+        if(drawCards === null && event.button == 0) {
             event.preventDefault();
             playCombination();
         }
@@ -119,43 +115,47 @@ function setCards(packs) {
                     cardNumber: j,
                     deck: i,
                     type: type,
-                    points: getPoints(j),
-                    value: getValue(j),
+                    points: getCardPoints(j),
+                    value: getCardValue(j),
                 }
 
                 deck.push(card);
             }
         });
 
-        deck.push({ id: `card-${i}-${1}-joker`, type: JOKER, points: null, value: JOKER.toUpperCase() });
-        deck.push({ id: `card-${i}-${2}-joker`, type: JOKER, points: null, value: JOKER.toUpperCase() });
-    }
-
-    function getPoints(num) {
-        if(num === 1)
-            return null;
-        else if(num === 11 || num === 12 || num === 13)
-            return 11;
-        else return num;
-    }
-
-    function getValue(num) {
-        if(num === 1)
-            return "A";
-        else if(num === 11)
-            return "J";
-        else if(num === 12)
-            return "Q";
-        else if(num === 13)
-            return "K";
-        else return num;
+        deck.push({ id: `card-${i}-${1}-joker`, type: JOKER, points: null, value: JOKER.toUpperCase(), cardNumber: 99 });
+        deck.push({ id: `card-${i}-${2}-joker`, type: JOKER, points: null, value: JOKER.toUpperCase(), cardNumber: 99 });
     }
 
     console.log("alle kaarten: ", deck);
 }
 
+function getCardPoints(num) {
+    if(num === 1)
+        return null;
+    else if(num === 11 || num === 12 || num === 13)
+        return 11;
+    else if(num > 13)
+        return null;
+    else return num;
+}
+
+function getCardValue(num) {
+    if(num === 1)
+        return "A";
+    else if(num === 11)
+        return "J";
+    else if(num === 12)
+        return "Q";
+    else if(num === 13)
+        return "K";
+    else return num;
+}
+
 function dealCards(amount) { console.log("deal cards",amount);
     for (let i = 0; i < amount; i++) {
+        if(deck.length === 0) break;
+
         const randomIndex = Math.floor(Math.random() * deck.length);
         const dealtCard = deck.splice(randomIndex, 1)[0];
         cards.push(dealtCard);
@@ -189,6 +189,7 @@ function getCardView(card) {
         if(event.button == 0) {
             event.preventDefault();
             playcard(card);
+            //clearCombination();
         }
     });
     // right mouse button click
@@ -207,22 +208,22 @@ function playcard(card, combination = false) { console.log("play card: ", card);
     cardPile.push(card);
     cards = cards.filter(item => item !== card);
 
-    if(card.value === JOKER || card.value === "A") {
+    if(combination) {
         if(drawCards) {
-            if(combination) {
-                drawCards.amount++;
-            } else {
-                drawCards.amount += 3;
-            }
-            
-            drawCards.dice = combination;
+            drawCards.amount++;
         } else {
-            if(combination) {
-                drawCards = { amount: 1, dice: true };
-            } else {
-                drawCards = { amount: 3, dice: false };
-            }
+            drawCards = { amount: 1, dice: true };
         }
+        drawCardsText.text(drawCards.amount);
+    }
+    else if(card.type === JOKER || card.value === "A") {
+        if(drawCards) {
+            drawCards.amount += 3;
+            drawCards.dice = false;
+        } else {
+            drawCards = { amount: 3, dice: false };
+        }
+        drawCardsText.text(drawCards.amount);
     }
     
 
@@ -251,20 +252,54 @@ function getCombinationPoints() {
 
 function addToCombination(card) {
     if(drawCards !== null) return;
+    // er mag niet meer dan één joker in een combinatie zitten
+    if(card.type === JOKER && combinationCards.find(card => card.type === "JOKER")) return;
     // TODO: als card een A is, kiezen welke waarde en die als card.value setten
     let cardView = $(`#${card.id}`);
     console.log("card added to combination: ", card);
-    combinationCards.push(card);
 
-    cardView.remove().appendTo(combinationDiv);
+    if (card.value === "A") {
+        card.points = 1;
+        card.cardNumber = 1;
+        cardView.remove().prependTo(combinationDiv);
+    } else {
+        cardView.remove().appendTo(combinationDiv);
+    }
+    
+    combinationCards.push(card);
     combinationDiv.css("display", "flex");
     combinationDiv.attr('title', getCombinationPoints());
 
-    cardView.addClass('draggable');
+    cardView.addClass('combinationCard');
     cardView.on('contextmenu', function(event) {
         event.preventDefault();
         removeFromCombination(card);
     });
+
+    // A mag alleen helemaal vooraan of helemaal achteraan staan. vooraan is points = 1 en cardNumber = 1. Achteraan is points = 12 en cardNumber = 14
+    if (!$(combinationDiv).data('uiSortable')) {
+        $(combinationDiv).sortable({
+            stop: function(event, ui) {
+                let movedCardDiv = ui.item;
+                let movedCard = combinationCards.filter(card => card.id === movedCardDiv[0].id)[0];
+                //console.log("movedCard", movedCard);
+                
+                if (movedCard.value === "A") {
+                    console.log("moved card = A: ", movedCard);
+                    if (movedCardDiv.index() === 0) {
+                        movedCard.points = 1;
+                        movedCard.cardNumber = 1;
+                    } else if (movedCardDiv.index() === movedCardDiv.parent().children().length - 1) {
+                        movedCard.points = 12;
+                        movedCard.cardNumber = 14;
+                    }
+
+                    console.log("moved card changed: ", movedCard);
+                    combinationDiv.attr('title', getCombinationPoints());
+                }
+            }
+        });
+    };
 }
 
 function removeFromCombination(card) {
@@ -292,20 +327,20 @@ function removeFromCombination(card) {
 
 function clearCombination() {
     if (combinationCards.length > 0) {
-        let combinationDivChildren = combinationDiv.children();
+        let combinationDivChildren = combinationDiv.children().clone();
         combinationDivChildren.removeClass('draggable');
-        combinationDivChildren.appendTo(handCardsDiv);
         combinationDivChildren.each(function() {
             $(this).on('contextmenu', function(event) {
                 event.preventDefault();
-                playcard($(this));
+                addToCombination($(this));
             }).on('click', function(event) {
                 if (event.button == 0) {
                     event.preventDefault();
-                    addToCombination($(this));
+                    playcard($(this));
                 }
             });
         });
+        combinationDivChildren.appendTo(handCardsDiv);
         combinationDiv.empty();
         combinationDiv.css("display", "none");
         combinationCards = [];
@@ -341,67 +376,112 @@ function validCard(card) {
 
 function validCombination() {
     // user already decided value of A if it's included
-    if(combinationCards.length < 3) return false;
-
-    if(validStraatje()) {
-        alert("Straatje goed!");
-    }
-    if(validxOfaKind()) {
-        alert("3/4 of a kind goed!");
-    }
-
     return (validStraatje() || validxOfaKind());
 }
 
 function validStraatje() {
-    // TODO: A en JOKER implementeren
+    // TODO: van K naar A mogelijk maken
     if (!combinationCards || combinationCards.length < 3) return false;
 
+    let nonSpecialCards = combinationCards.filter(card => card.type !== "JOKER" && card.value !== "A");
+    nonSpecialCards.sort((a, b) => a.cardNumber - b.cardNumber);
+
+    // sorteren op kaarnumber klein naar groot
     combinationCards.sort((a, b) => a.cardNumber - b.cardNumber);
-    const type = combinationCards[0].type;
-    let totalPoints = combinationCards[0].points;
+    const normalLowestCard = nonSpecialCards[0];
+    const normalHighestCard = nonSpecialCards[nonSpecialCards.length - 1];
+    // alle kaarten zijn A's, of alleen A's en een joker
+    if(!normalLowestCard) return false;
+    let totalPoints = combinationCards.find(card => card.value !== "A").points;
 
     let sameType = true;
     combinationCards.forEach(card => {
-        if (card.type !== type) sameType = false;
+        if (card.type !== normalLowestCard.type && card.value !== "A") sameType = false;
     });
-    if (!sameType) return false;
+    if (!sameType) {
+        alert("geen straatje. !sameType"); return false;
+    }
 
     let i = 1;
     while (i < combinationCards.length) {
-        if (combinationCards[i].cardNumber !== combinationCards[i - 1].cardNumber + 1) {
-            if (i === 1 && combinationCards[0].value === "A") {
+        let nextCard = combinationCards[i];
+        let currentCard = combinationCards[i - 1];
+        // als er geen volgende kaart meer is.
+        if (typeof nextCard === 'undefined') {
+            console.log('undefined');
+            break;
+        }
+        // als volgende kaart niet opeenvolgend is met huidige kaart
+        else if (nextCard.cardNumber !== currentCard.cardNumber + 1) {
+            // als de eerste kaart een A is, dan achteraan zetten
+            if (i === 1 && currentCard.value === "A") {
                 combinationCards.push(combinationCards.shift());
-                i = 0;
-            } else if (i !== 1 && combinationCards[i - 1].cardNumber === 13 && combinationCards[i].cardNumber === 1) {
+                i = 1; continue;
+            // als de volgende kaart een A is, dan de toegekende punten meetellen
+            } else if(nextCard.value === "A") {
+                totalPoints += nextCard.points;
                 i++;
+            // als het een joker is (is altijd de laatste kaart. Er is maar max één joker in een combinatie)
+            } else if(nextCard.type === JOKER) {
+                let pointsLowest = getCardPoints(normalLowestCard.cardNumber-1);
+                let pointsHighest = getCardPoints(normalHighestCard.cardNumber+1);
+                if(pointsLowest !== null && totalPoints + pointsLowest === luckyNumber) {
+                    return true;
+                } else if (pointsHighest !== null && totalPoints + pointsHighest === luckyNumber) {
+                    return true;
+                } else {
+                    return false;
+                }
+            // als het geen geldig straatje is
             } else {
+                console.log("geen geldig straatje, currentCard:", currentCard);
+                console.log("geen geldig straatje, nextCard:", nextCard);
+                alert("geen geldig straatje");
                 return false;
             }
+        // als volgende kaart wel opeenvolgend is met huidige kaart
+        } else {
+            totalPoints += nextCard.points;
+            i++;
         }
-        totalPoints += combinationCards[i].points;
-        i++;
     }
 
+    alert("straatje. totalPoints: ", totalPoints);
     return totalPoints === luckyNumber;
 }
 
+// TODO: je mag nu niet een combinatie hebben van alleen maar As en/of JOKERs. moet wel kunnen
 function validxOfaKind() {
-    // TODO: A en JOKER implementeren
     if(combinationCards.length < 3) return false;
 
+    let nonSpecialCards = combinationCards.filter(card => card.type !== "JOKER" && card.value !== "A");
+    if(nonSpecialCards.length === 0) return false;
+
     let pastTypes = [];
-    let sameValue = combinationCards[0].value;
+    let sameValue = nonSpecialCards[0].value;
+    let cardPoints = nonSpecialCards[0].points;
     let totalPoints = 0;
+    let xOfaKind = 0;
     
     combinationCards.forEach(card => {
-        if (card.value !== sameValue) return false;
-        else if (pastTypes.includes(card.type)) return false;
-        else {
-            pastTypes.push(card.type);
+        if (card.value !== sameValue && card.type !== JOKER && card.value !== "A") {
+            alert("geen 1");
+            return false;
+        } else if (pastTypes.includes(card.type) || xOfaKind > 4) {
+            alert("geen 2");
+            return false;
+        } else if(card.type === JOKER && xOfaKind <= 3) {
+            totalPoints += cardPoints;
+            xOfaKind++;
+        } else if(card.value === "A") {
             totalPoints += card.points;
+        } else {
+            pastTypes.push(card.type);
+            totalPoints += cardPoints;
+            xOfaKind++;
         }
     });
 
+    alert("totalPoints: ", totalPoints);
     return totalPoints === luckyNumber;
 }
