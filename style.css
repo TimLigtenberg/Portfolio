@@ -15,3 +15,79 @@
     text-align: center;
     font-size: 25px;
 }
+
+#feedback {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 50%;
+    border: 1px rgb(215, 90, 90) solid;
+    padding: 20px;
+    border-radius: 0 0 20px 20px;
+    z-index: 11;
+    animation-name: fade-in;
+    animation-duration: 1s;
+}
+@keyframes fade-in {
+    from {top: -100px; opacity: 0;}
+    to {top: 0; opacity: 1;}
+}
+@keyframes fade-out {
+    from {top: 0; opacity: 1;}
+    to {top: -100px; opacity: 0;}
+}
+
+#feedbackMessage {
+    font-size: 20px;
+    word-break: break-all;
+}
+
+.blue-button {
+    background-color: transparent;
+    color: black;
+    border: 4px solid #008CBA;
+    font-weight: bold;
+    padding: 5px 10px 5px 10px;
+    animation: wiebel 2.4s infinite;
+    animation-delay: 2s;
+}
+.blue-button:hover {
+    background-color: #008CBA;
+    color: white;
+}
+@keyframes wiebel {
+    0% {transform: rotate(0deg);}
+    5% {transform: rotate(5deg);}
+    10% {transform: rotate(-5deg);}
+    15% {transform: rotate(5deg);}
+    20% {transform: rotate(0deg);}
+    100% {transform: rotate(0deg);}
+}
+.red-button {
+    background-color: transparent;
+    color: black;
+    border: 4px solid #f44336;
+    font-weight: bold;
+    padding: 5px 10px 5px 10px;
+}
+.red-button:hover {
+    background-color: #f44336;
+    color: white;
+}
+
+#feedbackButtons {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+@media only screen and (max-device-width: 500px) {
+    #feedbackMessage {
+        font-size: 8px;
+    }
+    .blue-button {
+        position: absolute;
+        bottom: 70px;
+        right: 15px;
+    }
+}

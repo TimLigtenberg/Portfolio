@@ -3,7 +3,7 @@
     top: 0;
     /*background-color: lightgray;*/
     width: 100%;
-    height: 80%;
+    height: calc(100% - 220px);
 }
 
 #hand-cards {
@@ -13,8 +13,13 @@
     bottom: 0;
     background-color: grey;
     width: 100%;
-    height: 20%;
+    height: 220px;
+    overflow-x: auto;
 }
+
+/*#hand-cards .cardd {
+    margin-left: -120px;
+}*/
 
 #combination {
     display: flex;
@@ -34,8 +39,8 @@
 }
 #card-pile {
     position: absolute;
-    width: 300px;
-    height: 400px;
+    width: 180px;
+    height: 280px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -43,10 +48,10 @@
 
 .cardd {
     position: relative;
-    width: 200px;
-    height: 300px;
-    min-width: 180px;
-    min-height: 270px;
+    width: 133px;
+    height: 200px;
+    min-width: 133px;
+    min-height: 200px;
     background-color: white;
     border: 2px black solid;
     border-radius: 5px;
@@ -68,7 +73,7 @@
 }
 
 .card-icon {
-    font-size: 38px;
+    font-size: 25px;
     font-weight: bold;
     position: absolute;
     width: 50px;
@@ -88,10 +93,10 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 100px;
-    height: 50px;
-    font-size: 50px;
-    line-height: 50px;
+    width: 66px;
+    height: 33px;
+    font-size: 33px;
+    line-height: 33px;
     text-align: center;
 }
 .card-value-hearts, .card-value-diamonds {
@@ -101,8 +106,8 @@
     color: black;
 }
 .card-value-JOKER, .card-value-A {
-    width: 150px;
-    font-size: 50px;
+    width: 100px;
+    font-size: 33px;
     font-weight: bold;
     animation: rainbow 5s infinite;
 }
@@ -137,14 +142,14 @@
 }
 
 #lucky-number {
-    font-size: 32px;
+    font-size: 21px;
     font-weight: bold;
     color: yellow;
     text-shadow: 0px 0px 8px #000;
     text-align: center;
 }
 #lucky-number-label {
-    font-size: 32px;
+    font-size: 21px;
     font-weight: bold;
     margin-right: auto;
 }
@@ -172,7 +177,7 @@
 #menu {
     position: absolute;
     display: inline-block;
-    width: 200px;
+    width: 140px;
     right: 10px;
     top: 10px;
     z-index: 10;

@@ -40,6 +40,8 @@ $(function() {
     $("#lucky-number-container").draggable();
     $("#rules-object-container").draggable();
 
+    //showFeedback("test", "error");
+
     $('#lucky-number-btn').on('click', function(event) {
         if(event.button == 0) {
             event.preventDefault();
