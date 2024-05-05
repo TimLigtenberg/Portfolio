@@ -35,9 +35,10 @@ let cardPile = [];
 $(function() {
     // TODO: dobbelstenen totaal aantal laten zien. Misschien met dobbelsteen groot weergeven wat die heeft gegooid en uiteindelijk de som groot weerwGEVEN
     // TODO: duidelijker weergeven de totale punten van de combinatie
-    // TODO: joker toevoegen aan combinatie, de totale punten berekenen. bij onvoledige combinatie een ?? maken en bij volledig berekenen
     // TODO: duidelijker weergeven dat de A helemaal naar rechts gesleept moet worden om er 12 punten van te maken
     // TODO: mooie dobbelstenen zelf maken
+    // TODO: alle kaarten in hand laten zien zonder te hoeven scrollen
+    // TODO: winnen
     // TODO: comments allemaal engels maken
 
     handCardsDiv = $('#hand-cards');//.sortable();
@@ -50,8 +51,6 @@ $(function() {
     $("#menu").draggable();
     $("#lucky-number-container").draggable();
     $("#rules-object-container").draggable();
-
-    //showFeedback("test", "error");
 
     $('#lucky-number-btn').on('click', function(event) {
         if(event.button == 0) {
@@ -163,9 +162,12 @@ function getCardValue(num) {
     else return num;
 }
 
-function dealCards(amount) { console.log("deal cards",amount);
+function dealCards(amount) {
     for (let i = 0; i < amount; i++) {
-        if(deck.length === 0) break;
+        if(deck.length === 0) {
+            showFeedback("There are no more cards to draw.", "error");
+            break;
+        }
 
         const randomIndex = Math.floor(Math.random() * deck.length);
         const dealtCard = deck.splice(randomIndex, 1)[0];
@@ -208,6 +210,22 @@ function getCardView(card) {
         event.preventDefault();
         addToCombination(card);
     });
+
+    cardView.on('mousemove', function(e) {
+        const boundingRect = $(this)[0].getBoundingClientRect();
+        const offsetX = e.clientX - boundingRect.left - boundingRect.width / 2;
+        const offsetY = e.clientY - boundingRect.top - boundingRect.height / 2;
+        
+        const rotateX = offsetY / 10;
+        const rotateY = offsetX / 10;
+    
+        $(this).css('transform', `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`);
+    });
+    
+    cardView.on('mouseleave', function() {
+        $(this).css('transform', 'perspective(1000px) rotateY(0deg)');
+    });
+
     cardView.css("cursor", "pointer");
 
     return cardView;
@@ -264,9 +282,18 @@ function playcard(card, combination = false) {
 function getCombinationPoints() {
     let points = 0;
 
-    combinationCards.forEach(card => {
-        points += card.points;
+    const containsJoker = combinationCards.some(card => {
+        if (card.type === JOKER) {
+            return true;
+        } else {
+            points += card.points;
+            return false;
+        }
     });
+
+    if (containsJoker) {
+        return "??";
+    }
 
     return points;
 }
@@ -279,7 +306,6 @@ function addToCombination(card) {
     }
 
     let cardView = $(`#${card.id}`);
-    console.log("card added to combination: ", card);
 
     if (card.value === "A") {
         card.points = 1;
@@ -308,7 +334,6 @@ function addToCombination(card) {
                 let movedCard = combinationCards.filter(card => card.id === movedCardDiv[0].id)[0];
                 
                 if (movedCard.value === "A") {
-                    console.log("moved card = A: ", movedCard);
                     if (movedCardDiv.index() === 0) {
                         movedCard.points = 1;
                         movedCard.cardNumber = 1;
@@ -317,7 +342,6 @@ function addToCombination(card) {
                         movedCard.cardNumber = 14;
                     }
 
-                    console.log("moved card changed: ", movedCard);
                     combinationDiv.attr('title', getCombinationPoints());
                 }
             }

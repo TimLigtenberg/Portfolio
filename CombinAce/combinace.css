@@ -58,7 +58,12 @@
     box-shadow: 0px 0px 12px #000;
     user-select: none;
     margin: 0 3px;
+    transition: transform 0.3s ease;
 }
+.card:hover {
+    transform: perspective(1000px) rotateY(10deg);
+}
+
 .cardd.card-A, .cardd.card-JOKER {
     animation: card-rainbow 5s infinite;
 }
