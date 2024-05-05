@@ -1,24 +1,28 @@
+BENODIGDHEDEN:
+Minimaal één pakje kaarten. Twee pakjes wordt aangeraden.
+Minimaal één normale dobbelsteen. Zo veel mogelijk dobbelstenen wordt aangeraden.
+Minimaal twee spelers. Vier wordt aangeraden.
+
 VOORBEREIDING EN SPELUITLEG:
-1. Twee pakjes kaarten wordt aangeraden voor dit spel.
-2. Iedere speler krijgt een willekeurig getal vanaf 3 t/m 36, dat is [jouw eigen getal].
-3. Iedere speler krijgt 15 kaarten.
-4. Er wordt één kaart van de pot opgelegd en daarmee begint het spel.
-De speler die begint, moet een kaart opleggen die hetzelfde soort heeft als de kaart of hetzelfde cijfer/letter.
-Wanneer deze niet kan, moet hij een kaart pakken. Deze mag direct opgelegd worden als dat kan.
-5. De volgende speler doet hetzelfde.
-6. Naast een bijpassende kaart mag een speler ook een COMBINATIE* opleggen.
-7. Het spel is afgelopen wanneer een speler geen kaarten meer heeft en ook geen kaarten moet pakken.
-8. Verdere regels van kaarten staan onder het kopje ANDERE SPECIALE KAARTEN EN REGELS.
+1. Iedere speler krijgt een willekeurig getal vanaf 3 t/m 36, dat is [jouw eigen getal].
+2. Iedere speler krijgt 15 kaarten.
+3. Er wordt één kaart opgelegd en daarmee begint het spel.
+   De speler die begint, moet een kaart opleggen die hetzelfde soort heeft als de kaart of hetzelfde cijfer/letter.
+   Wanneer deze niet kan, moet hij een kaart pakken. Deze mag direct opgelegd worden als dat kan.
+4. De volgende speler doet hetzelfde.
+5. Naast een bijpassende kaart mag een speler ook een COMBINATIE* opleggen.
+6. Het spel is afgelopen wanneer een speler geen kaarten meer heeft en ook geen kaarten moet pakken.
+7. Verdere regels van kaarten staan onder het kopje ANDERE SPECIALE KAARTEN EN REGELS.
 
 
 
 COMBINATIES*:
 De combinatie mag meer dan 2 kaarten van hetzelfde getal of letter zijn van verschillende soorten,
 of meer dan 2 kaarten met opeenvolgende getallen van hetzelfde soort.
-De combinatie mag alleen opgelegd worden als alle getallen bij elkaar overeenkomt met [jouw eigen getal].
+De combinatie mag alleen opgelegd worden als de punten van alle kaarten bij elkaar opgeteld overeenkomt met [jouw eigen getal].
 
-Boer, vrouw en koning tellen als 11.
-A telt als 1 of 12.
+Boer, vrouw en koning tellen als 11 punten.
+A telt als 1 of 12 punten, dat mag je zelf beslissen.
 Joker telt als extra/ontbrekende kaart.
 
 Straatje: ♦A + ♦2 + ♦3
@@ -31,22 +35,22 @@ Om de A in te kunnen zetten, moet de combinatie al wel kloppen en bestaan uit mi
 De A kan gebruikt worden om de totale punten van je combinatie te verhogen met 1 of 12 om zo tot [jouw eigen getal] te komen.
 Er zit geen maximum op het aantal A's dat je in een combinatie mag gebruiken.
 
-♦2 + ♦3 + ♦4 + ♣A♦A♥A♠A = 10 of 21
-♣5 + ♦5 + ♥5 + ♣A♦A♥A♠A = 16 of 27
-♦2 + ♦3 + ♦4 + ♣A + ♦A = 11, 22 of 33
-♦V + ♦K + ♦A + ♣A = 35 of 46
+♦2 + ♦3 + ♦4 + ♣A♦A♥A♠A = 10 of 21 punten
+♣5 + ♦5 + ♥5 + ♣A♦A♥A♠A = 16 of 27 punten
+♦2 + ♦3 + ♦4 + ♣A + ♦A = 11, 22 of 33 punten
+♦V + ♦K + ♦A + ♣A = 35 of 46 punten
 
 MAAR als je een A gebruikt in een straatje, telt deze als 12 achter de K of als 1 voor de 2
 
-♣A + ♣2 + ♣3 = 6
-♣K + ♣A + ♣2 + ♣3 = 17
+♣A + ♣2 + ♣3 = 6 punten
+♣K + ♣A + ♣2 + ♣3 = 17 punten
 
 GEBRUIK VAN DE JOKER (Joker is extra/missende kaart)
 De joker mag altijd ingezet worden, ook in combinaties.
 Er mag maar maximaal 1 joker in een combinatie zitten.
 
-♦2 + JOKER + ♦4 = 9
-♣10 + ♦10 + JOKER = 30
+♦2 + JOKER + ♦4 = 9 punten
+♣10 + ♦10 + JOKER = 30 punten
 
 
 
@@ -60,9 +64,10 @@ Als je een A of JOKER als enkele kaart opgooit, moet de volgende speler kaarten 
 Met een 2 skip je pakken door jokers en A's, dus ga je door naar de volgende maar er komen geen extra kaarten bij.
 Een A, een 2 en een joker mogen altijd achter elkaar opgegooid worden totdat een speler geen kaart meer oplegt. Deze speler moet kaarten pakken.
 Degene die moet pakken, pakt 3 kaarten per opgelegde A en joker.
-Als er 2en op zijn gelegd, worden deze er niet bij opgeteld.
+Als er 2en op zijn gelegd, worden deze er dus niet bij opgeteld.
 
-
+Als er geen kaarten meer in de pot zitten, mogen de opgelegde kaarten geschud en als pot gemaakt worden.
+Alleen de laatst opgelegde kaart moet blijven liggen
 
 
 
@@ -83,38 +88,36 @@ Als er 2en op zijn gelegd, worden deze er niet bij opgeteld.
 
 KAARTEN RUILEN:
 
-Als je een specifieke kaart nodig hebt kun je met een joker, 2 en A ruilen met een andere speler. Ruilen is handig als je bijvoorbeeld alleen nog een schoppen 3 nodig hebt om een straatje te maken. Beide spelers moeten eens zijn met de ruil. Er mag overlegd worden.
+Als je een specifieke kaart nodig hebt kun je met een joker, 2 of A ruilen met een andere speler.
+Ruilen is handig als je bijvoorbeeld alleen nog een schoppen 3 nodig hebt om een straatje te maken.
+Beide spelers moeten eens zijn met de ruil. Er mag overlegd worden.
+
+
+
 
 ANDERE SPECIALE KAARTEN EN REGELS:
 
 MET UNO (wanneer je precies dezelfde kaart in je hand hebt als een kaart die wordt opgegooid, mag je deze meteen leggen en gaat het spel verder naar de persoon die na jou aan de beurt is)
 ZONDER LAATSTE KAART ZEGGEN
-NIET EINDIGEN MET PESTKAART (2 is geen pestkaart)
-7 -> opnieuw opgooien
-8 -> beurt overslaan
-BOER -> kiezen wat het wordt
-HEER -> keer
+7 -> je bent nog een keer aan de beurt
+8 -> de vogende speler moet een beurt overslaan
+BOER -> kiezen welk type kaart het wordt
+HEER -> keer (het spel gaat verder in tegengestelde richting)
 ALS JE PAST EN EEN KAART PAKT, MAG DIE DIRECT OPGELEGT WORDEN
-ALS JE PAST EN EEN KAART PAKT EN MET DIE KAART EEN COMBINATIE KAN MAKEN, MAG DE GEHELE COMBINATIE GELIJK OPGELEGT WORDEN
-Wanneer een speler d.m.v. de UNO regel twee schoppen 2’en oplegt, moet de volgende persoon ook een 2 opgooien of twee kaarten pakken. Zolang er een 2 opgelegd wordt, moet degene die geen 2 meer op kan leggen alle opgelegde 2’en bij elkaar opgeteld aan kaarten pakken
-EEN A MATCHED MET ELKE SOORT KAART BEHALVE ALS DEZE WORDT GEBRUKT OM EEN STRAATJE TE MAKEN, DAN MOET DE A VAN HETZELFDE SOORT ZIJN ALS DE REST VAN DE COMBINATIE, EEN A MAG NIET NA EEN JOKER OPGELEGT WORDEN TENZIJ ER AL GEPAKT IS VOOR DIE JOKER.
-WANNEER JE NA MEER DAN 1 KAART PAKKEN NIET KUNT, HOEF JE NIET BIJ TE PAKKEN
+ALS JE PAST EN EEN KAART PAKT EN MET DIE KAART EEN COMBINATIE KAN MAKEN, MAG DE GEHELE COMBINATIE GELIJK OPGELEGD WORDEN
+Wanneer een speler d.m.v. de UNO regel twee schoppen 2’en oplegt, moet de volgende persoon ook een 2 opgooien of vier kaarten pakken. Zolang er een 2 opgelegd wordt, moet degene die geen 2 meer op kan leggen alle opgelegde 2’en bij elkaar opgeteld aan kaarten pakken
 WANNEER IEMAND VIER NEGENS IN EEN COMBINATIE OPLEGT (JOKERS TELLEN NIET MEE), MOET IEDEREEN ZIJN KAARTEN DOORGEVEN AAN DE PERSOON IN DE RICHTING WAARIN HET SPEL GAAT.
-ALS IEMAND 7 OF MEER KAARTEN IN ÉÉN BEURT OP KAN LEGGEN EN HET IS GEEN COMBINATIE, MOET DE REST 3 KAARTEN PAKKEN. ALS HIERDOOR DE KAARTEN OPGAAN WAARDOOR IEMAND GEEN 3 KAARTEN MEER KAN PAKKEN, MOET IEDEREEN ÉÉN OF TWEE KAARTEN NAAR KEUZE AAN DIE PERSOON GEVEN.
-WANNEER JE EEN KAART OPLEGT DIE NIET MATCHED MET DE LAATST OPGELEGDE KAART(ZIE OOK “GEBRUIK VAN DE A EN COMBINATIES", LAATSTE REGEL) EN NIEMAND ZEGT ER WAT VAN, WORDT DIE ZET GOEDGEKEURD ZODRA ER EEN NIEUWE KAART OPGELGT WORDT)
-  GEBRUIK VAN DE A EN COMBINATIES:
+ALS IEMAND 7 OF MEER KAARTEN ACHTER ELKAAR OP KAN LEGGEN EN HET IS GEEN COMBINATIE, MOET DE REST 3 KAARTEN PAKKEN. ALS HIERDOOR DE KAARTEN OPGAAN WAARDOOR IEMAND GEEN 3 KAARTEN MEER KAN PAKKEN, MOET IEDEREEN ÉÉN OF TWEE KAARTEN NAAR KEUZE AAN DIE PERSOON GEVEN.
+WANNEER JE EEN KAART OPLEGT DIE NIET MATCHT MET DE LAATST OPGELEGDE KAART(ZIE OOK “GEBRUIK VAN DE A EN COMBINATIES", LAATSTE REGEL) EN NIEMAND ZEGT ER WAT VAN, WORDT DIE ZET GOEDGEKEURD ZODRA ER EEN NIEUWE KAART OPGELGD WORDT)
+NIET EINDIGEN MET PESTKAART (2 is geen pestkaart. joker, A, 7, 8, BOER en HEER wel)
+    Wanneer je wel uitgaat met een pestkaart, moet je 2 kaarten pakken.
+    Als je na het opgooien van een combinatie geen kaarten meer overhebt en de kaart bovenop de stapel is een pestkaart, geldt dezelfde regel.
 
-A is 2 kaarten pakken behalve als het in combinatie wordt opgegooid A wordt als 1 en 12 gezien dus kan ook als straatje worden opgegooid, bijvoorbeeld A, 2, 3 of V, K, A Een A mag in een straatje alleen gebruikt worden na een koning. Dus niet 10, B, A Als je de A in combinatie gooit is het niet 2 kaarten pakken maar je mag ervoor gooien. Voor elke A die je in combinatie oplegt moet je de D12 gooien om te beslissen hoeveel de volgende speler pakt. Als degene die dan moet pakken ook een combinatie met A kan opgooien kan diegene de kaarten + aantal Aces opgegooid x uitkomst D12 doorgeven Een A mag ook gebruikt worden om je combinatie van 3 of meer aan te vullen met 1 of 12 Bijvoorbeeld je getal is 19, je mag drie 6'en opleggen met een A, want 3x6+1=19 of als je getal 34 is mag je 6, 7, 8 en twee Aces opleggen want 6+7+8+12+1=34 Als je de A op deze manier wordt gebruikt moet de volgende speler met D10 gooien om te beslissen hoeveel hij pakt of +2 kaarten geven aan de volgende speler door één A op te gooien Joker kan gebruikt worden als extra kaart bij een combinatie, bijvoorbeeld 3+JOKER+5 Als je een joker in combinatie gebruikt komen er geen extra kaarten bij. Voor elke combinatie ZONDER A moet de volgende speler D6 x aantal kaarten pakken tenzij die ook een combinatie ZONDER A kan opleggen, in dat geval worden de aantal kaarten die gepakt moeten morgen verhoogd met D6 x aantal kaarten in de volgende combinatie en die worden doorgegeven aan de volgende speler. Als een speler kaarten moet pakken na een joker of combinatie en deze kan met die kaarten een combinatie maken, mag dit gelijk opgelegd worden. Als je niet kunt hoef je geen kaart bij te pakken Als een speler kaarten moet pakken doordat de vorige speler een combinatie oplegde, moet de eerstvolgende kaart die wordt opgelegd matchen met de laatst opgelegde kaart. Als dit een joker is, moet er een schoppen 2 of ruiten vrouw op worden gelegd, als je niet kan, pak je nog een kaart.
 
-MET WELKE KAARTEN MAG JE UITGAAN:
-
-Je mag met elke niet pestkaart uitgaan. Een 2 wordt niet gezien als pestkaart. Wanneer je wel uitgaat met een pestkaart, moet je 2 kaarten pakken Wanneer je laatste kaart een 7 is en je die oplegt, moet je 3 kaarten pakken Wanneer je meerdere kaarten achter elkaar oplegt in één beurt en daarmee uitgaat, moet je twee keer de D10 gooien om te bepalen hoeveel kaarten je bij moet pakken. Je mag dus ook passen en een kaart pakken als je wel op kunt leggen om dit te voorkomen. Dit geldt ook voor de UNO regel maar niet als je met een combinatie uitgaat. Wanneer je op deze manier uitgaat en je laatst opgelegde kaart is een pestkaart geldt dezelfde regel. Wanneer je op deze manier uitgaat en je laatst opgelegde kaart is een 7, moet je maar 3 kaarten pakken
-
-GEBRUIK STENEN:
-
-D8 en D20: Jouw getal bepalen
-D6 : Bepalend hoeveel je pakt bij een joker en A
 
 ELIMINEREN:
 
-Wanneer een speler meer kaarten moet pakken dan dat er beschikbaar zijn (de opgelegde kaarten mogen geschud weer als pot gemaakt worden, alleen de laatst opgelegde kaar moet blijven liggen), heeft deze verloren en dan moeten al zijn kaarten geschud op de pot gelegd worden. Tenzij iedereen 3 kaarten moest pakken door de 14e speciale regel Wanneer iemand geëlimineerd wordt, moet iedereen één A aan de kant leggen. Deze A’s mogen niet meer gepakt worden. Als je geen A hebt, hoef je er geen weg te leggen. Daarna moet iedereen die meer dan 20 kaarten heeft hun kaarten schudden en de helft (naar boven afgerond) terugleggen op de pot.
+Wanneer een speler meer kaarten moet pakken dan dat er beschikbaar zijn, heeft hij verloren.
+Al zijn kaarten moeten vervolgens geschud op de pot gelegd worden.
+Daarna moet iedereen die meer dan 20 kaarten heeft, de helft van de kaarten (naar boven afgerond) naar keuze wegleggen.
+De weggelegde kaarten mogen niet meer gebruikt worden in het spel.
