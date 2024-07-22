@@ -1,19 +1,9 @@
-#play-board {
-    position: absolute;
-    top: 0;
-    /*background-color: lightgray;*/
-    width: 100%;
-    height: calc(100% - 220px);
-}
-
 #hand-cards {
     display: flex;
     align-items: flex-end;
     position: absolute;
     bottom: 0;
-    background-color: grey;
     width: 100%;
-    height: 220px;
     overflow-x: auto;
 }
 
@@ -34,30 +24,41 @@
     box-shadow: 0px 0px 8px rgb(159, 159, 0);
 }
 #combination .cardd {
-    margin: 0 10px !important;
+    margin: 0 5px !important;
     float: left;
 }
 #card-pile {
     position: absolute;
     width: 180px;
     height: 280px;
-    top: 50%;
+    top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+#draw-buttons {
+    position: absolute;
+    width: 180px;
+    height: 280px;
+    top: 40%;
+    left: calc(50% + 200px);
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .cardd {
     position: relative;
-    width: 133px;
-    height: 200px;
-    min-width: 133px;
-    min-height: 200px;
+    width: 89px;
+    height: 133px;
+    min-width: 89px;
+    min-height: 133px;
     background-color: white;
     border: 2px black solid;
     border-radius: 5px;
-    box-shadow: 0px 0px 12px #000;
+    /*box-shadow: 0px 0px 12px #000;*/
     user-select: none;
-    margin: 0 3px;
     transition: transform 0.3s ease;
 }
 .card:hover {
@@ -81,9 +82,9 @@
     font-size: 25px;
     font-weight: bold;
     position: absolute;
-    width: 50px;
-    height: 50px;
-    line-height: 50px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
     text-align: center;
 }
 .card-icon-hearts, .card-icon-diamonds {
@@ -111,10 +112,12 @@
     color: black;
 }
 .card-value-JOKER, .card-value-A {
-    width: 100px;
-    font-size: 33px;
     font-weight: bold;
     animation: rainbow 5s infinite;
+}
+.card-value-JOKER {
+    width: 80px;
+    font-size: 22px;
 }
 @keyframes rainbow {
     0% { color: rgb(255, 0, 0); }
@@ -138,9 +141,8 @@
 
 #lucky-number-container {
     position: absolute;
-    top: 5px;
-    left: 0;
-    right: 0;
+    top: 40%;
+    left: calc(50% - 150px);
     width: 300px;
     text-align: center;
     z-index: 9;
@@ -160,28 +162,24 @@
 }
 
 #draw-card-btn {
-    display: block;
-    margin: 0 0 10px 0;
+
 }
 
 #draw-cards-btn {
-    display: block;
-    margin: 10px 0;
 }
 
 #play-combination-btn {
-    display: block;
-    margin: 10px 0;
+    position: absolute;
+    top: 5%;
+    left: 43%;
 }
 
 #draw-cards-text {
-    display: block;
-    margin: 10px 0 0 0;
+    float: right;
 }
 
 #menu {
-    position: absolute;
-    display: inline-block;
+    /*display: inline-block;
     width: 160px;
     right: 10px;
     top: 10px;
@@ -189,7 +187,15 @@
     padding: 20px;
     background-color: lightblue;
     border: 2px rgb(120, 197, 223) solid;
-    border-radius: 20px;
+    border-radius: 20px;*/
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 10%;
+    width: 100%;
+    background-color: lightblue;
+    display: flex;
+    align-items: center;
 }
 
 #rules-object-container {
@@ -204,4 +210,15 @@
 #rules-object {
     width: 100%;
     height: 100%;
+}
+
+#bord {
+    position: absolute;
+    width: 100%;
+    height: 90%;
+    top: 10%;
+}
+
+#show-rules {
+    margin-left: 10px;
 }

@@ -48,9 +48,9 @@ $(function() {
     playCombinationBtn = $("#play-combination-btn");
     drawCardBtn = $("#draw-card-btn");
 
-    $("#menu").draggable();
-    $("#lucky-number-container").draggable();
-    $("#rules-object-container").draggable();
+    //$("#menu").draggable();
+    //$("#lucky-number-container").draggable();
+    //$("#rules-object-container").draggable();
 
     $('#lucky-number-btn').on('click', function(event) {
         if(event.button == 0) {
@@ -61,6 +61,9 @@ $(function() {
 
     function initialize() {
         getLuckyNumber();
+        $("#draw-buttons").css("display", "flex");
+        $("#lucky-number").clone().appendTo("#menu");
+        $("#lucky-number-container").remove();
         setCards(1); // TODO: 2 decks
         dealCards(40); // TODO: 15 cards
     }
@@ -318,7 +321,7 @@ function addToCombination(card) {
     combinationCards.push(card);
     combinationDiv.css("display", "flex");
     combinationDiv.attr('title', getCombinationPoints());
-    playCombinationBtn.css("display", "block");
+    playCombinationBtn.css("display", "inline-block");
 
     cardView.addClass('combinationCard');
     cardView.on('contextmenu', function(event) {

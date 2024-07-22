@@ -3,9 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Portfolio Tim Ligtenberg</title>
-        <!--<link rel="icon" href="../assets/favicon.ico" type="image/x-icon">-->
         <link rel="icon" href="../assets/spadeAce-favicon.png" type="image/gif" >
 
         <!-- Styles to use everywhere -->
@@ -49,31 +47,32 @@
                 </form>
             </div>
 
-            <div id="bord">
-                <div id="lucky-number-container">
-                    <span id="lucky-number-label">Your lucky number</span>
-                    <br />
-                    <button id="lucky-number-btn" class="blue-button wiebel">Generate</button>
-                    <span id="lucky-number"></span>
-                </div>
+            <header id="menu" class="ui-widget-content">
+                <a id="show-rules" href="regels.txt" target="_blank">Show rules</a>
+                <!--<div id="rules-object-container">
+                    <object id="rules-object" data="regels.txt" type="text/plain"></object>
+                </div>-->
+            </header>
 
-                <div id="menu" class="ui-widget-content">
-                    <h5>Menu</h3>
+            <div id="lucky-number-container">
+                <span id="lucky-number-label">Your lucky number</span>
+                <br />
+                <button id="lucky-number-btn" class="blue-button wiebel">Generate</button>
+                <span id="lucky-number"></span>
+            </div>
+
+            <div id="bord">
+                <button id="play-combination-btn" class="blue-button wiebel" style="display: none;">Play combination</button>
+                <div id="combination" style="display: none;"></div>
+                <div id="card-pile"></div>
+                <div id="draw-buttons" style="display: none;">
                     <button id="draw-card-btn" class="red-button">Draw card</button>
-                    <button id="play-combination-btn" class="blue-button wiebel" style="display: none;">Play combination</button>
                     <span id="draw-cards-text">Draw cards: <span id="draw-cards-amount"></span></span>
                 </div>
-                <div id="rules-object-container">
-                    <object id="rules-object" data="regels.txt" type="text/plain">
-                        <a href="regels.txt">No Support?</a>
-                    </object>
-                </div>
-
-                <div id="combination" style="display: none;"></div>
-                <div id="play-board">
-                    <div id="card-pile"></div>
-                </div>
                 <div id="hand-cards"></div>
+
+                <div class="bot-hand-cards"></div>
+                <div class="bot-hand-cards"></div>
             </div>
         </div>
     </body>
