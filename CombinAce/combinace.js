@@ -34,6 +34,8 @@ let deck = [];
 let combinationCards = [];
 // placed cards
 let cardPile = [];
+// who's turn it is. 1 means it's your turn. 2 and 3 are the bots
+let playerTurn = 1;
 
 $(function() {
     // TODO: dobbelstenen totaal aantal laten zien. Misschien met dobbelsteen groot weergeven wat die heeft gegooid en uiteindelijk de som groot weerwGEVEN
@@ -51,6 +53,7 @@ $(function() {
     combinationDiv = $('#combination');
     playCombinationBtn = $("#play-combination-btn");
     drawCardBtn = $("#draw-card-btn");
+    $("#player-turn").html("It's your turn");
 
     //$("#menu").draggable();
     //$("#lucky-number-container").draggable();
@@ -70,13 +73,18 @@ $(function() {
         $("#lucky-number-container").remove();
         setCards(2);
         dealCards(15);
-        dealCardsBots(15);
+        dealCardsBots(8); // TODO: 15
     }
 
     drawCardBtn.on('click', function(event) {
+        if(playerTurn !== 1) {
+            showFeedback("It's not your turn.", "error");
+            return;
+        }
         if(drawCards === null && event.button == 0) {
             event.preventDefault();
             dealCards(1);
+            nextPlayerTurn();
             //TODO: clearCombination();
         } else {
             if(drawCards.dice) {
@@ -183,31 +191,6 @@ function dealCards(amount) {
     }
 }
 
-function dealCardsBots(amount) {
-    for (let i = 0; i < amount; i++) {
-        if(deck.length === 0) {
-            showFeedback("There are no more cards to draw.", "error");
-            break;
-        }
-
-        const randomIndex = Math.floor(Math.random() * deck.length);
-        const dealtCard = deck.splice(randomIndex, 1)[0];
-        cardsBot1.push(dealtCard);
-        handCardsDivBot1.append(getCardViewHidden(dealtCard));
-    }
-    for (let i = 0; i < amount; i++) {
-        if(deck.length === 0) {
-            showFeedback("There are no more cards to draw.", "error");
-            break;
-        }
-
-        const randomIndex = Math.floor(Math.random() * deck.length);
-        const dealtCard = deck.splice(randomIndex, 1)[0];
-        cardsBot2.push(dealtCard);
-        handCardsDivBot2.append(getCardViewHidden(dealtCard));
-    }
-}
-
 function getCardView(card) {
     let cardView = $('<div>');
     cardView.addClass(`cardd card-${card.value}`);
@@ -263,14 +246,11 @@ function getCardView(card) {
     return cardView;
 }
 
-function getCardViewHidden() {
-    let cardView = $('<div>');
-    cardView.addClass('cardd');
-    cardView.css("cursor", "pointer");
-    return cardView;
-}
-
 function playcard(card, combination = false) {
+    if(playerTurn !== 1) {
+        showFeedback("It's not your turn.", "error");
+        return;
+    }
     if(!combination && !validCard(card)) {
         showFeedback("You can't play this card.", "error");
         return;
@@ -304,16 +284,15 @@ function playcard(card, combination = false) {
     let cardView = $(`#${card.id}`);
     const title = card.type !== JOKER ? `${type_icon[card.type]} ${card.value}` : card.value;
     cardView.attr('title', title);
-    let randomTop = Math.floor(Math.random() * (cardPileDiv.height() - cardView.height()));
-    let randomLeft = Math.floor(Math.random() * (cardPileDiv.width() - cardView.width()));
     cardView.css({
         'position': 'absolute',
-        'top': randomTop + 'px',
-        'left': randomLeft + 'px',
+        'margin-left': Math.random() * 30,
+        'margin-top': Math.random() * 30,
         'cursor': 'default'
     });
 
     cardView.remove().appendTo(cardPileDiv);
+    nextPlayerTurn();
 }
 
 function getCombinationPoints() {
@@ -434,6 +413,11 @@ function clearCombination() {
 }
 
 function playCombination() {
+    if(playerTurn !== 1) {
+        showFeedback("It's not your turn.", "error");
+        return;
+    }
+
     if(drawCards === null || drawCards.dice === true) {
         if(validCombination()) {
             combinationCards.forEach(card => {
@@ -441,6 +425,7 @@ function playCombination() {
             });
     
             clearCombination();
+            nextPlayerTurn();
         } else {
             showFeedback("This is not a valid combination.", "error");
         }
@@ -462,6 +447,19 @@ function validCard(card) {
 function validCombination() {
     // user already decided value of A if it's included
     return (validStraatje() || validxOfaKind());
+}
+
+function nextPlayerTurn() {
+    console.log(playerTurn);
+    playerTurn = (playerTurn % 3) + 1;
+
+    if(playerTurn === 1) $("#player-turn").html("It's your turn");
+    else if(playerTurn === 2) $("#player-turn").html("It's bot1's turn");
+    else if(playerTurn === 3) $("#player-turn").html("It's bot2's turn");
+
+    if(playerTurn === 2 || playerTurn === 3) {
+        botsTurn();
+    }
 }
 
 function validStraatje() {
@@ -563,4 +561,176 @@ function validxOfaKind() {
     });
 
     return totalPoints === luckyNumber;
+}
+
+// BOT FUNCTIONALITIES
+
+function dealCardsBots(amount) {
+    for (let i = 0; i < amount; i++) {
+        if(deck.length === 0) { break; }
+        const randomIndex = Math.floor(Math.random() * deck.length);
+        const dealtCard = deck.splice(randomIndex, 1)[0];
+        cardsBot1.push(dealtCard);
+        handCardsDivBot1.append(getCardViewHidden(dealtCard));
+    }
+    for (let i = 0; i < amount; i++) {
+        if(deck.length === 0) { break; }
+        const randomIndex = Math.floor(Math.random() * deck.length);
+        const dealtCard = deck.splice(randomIndex, 1)[0];
+        cardsBot2.push(dealtCard);
+        handCardsDivBot2.append(getCardViewHidden(dealtCard));
+    }
+}
+
+function dealCardsBot(amount) {
+    for (let i = 0; i < amount; i++) {
+        if(deck.length === 0) { break; }
+        const randomIndex = Math.floor(Math.random() * deck.length);
+        const dealtCard = deck.splice(randomIndex, 1)[0];
+        if(playerTurn === 2) {
+            cardsBot1.push(dealtCard);
+            handCardsDivBot1.append(getCardViewHidden(dealtCard));
+        }
+        else if (playerTurn === 3) { 
+            cardsBot2.push(dealtCard);
+            handCardsDivBot2.append(getCardViewHidden(dealtCard));
+        }
+    }
+}
+
+function getCardViewHidden() {
+    let cardView = $('<div>');
+    cardView.addClass('cardd');
+    cardView.css("cursor", "pointer");
+    return cardView;
+}
+
+function getCardViewBot(card) {
+    let cardView = $('<div>');
+    cardView.addClass(`cardd card-${card.value}`);
+    cardView.attr("id", card.id);
+
+    if(card.type === JOKER) {
+        let cardValue = $(`<span class="card-value card-value-${card.value}">${card.value}</span>`);
+        cardView.append(cardValue);
+    } else {
+        let iconCornerTopLeft = $(`<span class="top-left card-icon card-icon-${card.type}">${type_icon[card.type]}</span>`);
+        let iconCornerBottomRight = $(`<span class="bottom-right card-icon card-icon-${card.type}">${type_icon[card.type]}</span>`);
+        let cardValue = $(`<span class="card-value card-value-${card.type}">${card.value}</span>`);
+        if(card.value === 'A') {
+            cardValue.removeClass().addClass("card-value card-value-A");
+        }
+    
+        cardView.append(iconCornerTopLeft);
+        cardView.append(iconCornerBottomRight);
+        cardView.append(cardValue);
+    }
+    
+    cardView.css("cursor", "pointer");
+
+    return cardView;
+}
+
+function botsTurn() {
+    if(drawCards !== null) {
+        setTimeout(function() {
+            if(drawCards.dice) {
+                rollDiceToDrawBot(drawCards.amount);
+            } else {
+                dealCardsBot(drawCards.amount);
+            }
+
+            drawCards = null;
+        }, 1000);
+    }
+    
+    setTimeout(function() {
+        if(playerTurn === 2) {
+            let cardPlayed = botPlayCardIfPossible(cardsBot1);
+            
+            if(!cardPlayed) {
+                drawCardBot();
+            }
+        }
+        else if (playerTurn === 3) {
+            let cardPlayed = botPlayCardIfPossible(cardsBot2);
+            
+            if(!cardPlayed) {
+                drawCardBot();
+            }
+        }
+    }, 1000);
+}
+
+function botPlayCardIfPossible(hand) {
+    for (let card of hand) {
+        if(validCard(card)) {
+            playCardBot(card);
+            return true;
+        }
+    };
+
+    return false;
+}
+
+function playCardBot(card) {
+    cardPile.push(card);
+
+    if(playerTurn === 2) {
+        cardsBot1 = cardsBot1.filter(item => item !== card);
+    } else if (playerTurn === 3) {
+        cardsBot2 = cardsBot2.filter(item => item !== card);
+    }
+
+    if(card.type === JOKER || card.value === "A") {
+        if(drawCards) {
+            drawCards.amount += 3;
+            drawCards.dice = false;
+        } else {
+            drawCards = { amount: 3, dice: false };
+        }
+        
+        drawCardBtn.html(`Draw ${drawCards.amount} cards!`);
+        drawCardBtn.addClass("wiebel invert");
+    }
+    
+    let cardView = getCardViewBot(card);
+    const title = card.type !== JOKER ? `${type_icon[card.type]} ${card.value}` : card.value;
+    cardView.attr('title', title);
+    cardView.css({
+        'position': 'absolute',
+        'margin-left': Math.random() * 30,
+        'margin-top': Math.random() * 30,
+        'cursor': 'default'
+    });
+
+    if(playerTurn === 2) {
+        $('#hand-cards-bot1 > :last-child').remove();
+    } else if (playerTurn === 3) {
+        $('#hand-cards-bot2 > :last-child').remove();
+    }
+    
+    cardView.appendTo(cardPileDiv);
+    nextPlayerTurn();
+}
+
+function drawCardBot() {
+    dealCardsBot(1);
+    nextPlayerTurn();
+
+    $(this).html("Draw card");
+    $(this).removeClass("wiebel invert");
+}
+
+function rollDiceToDrawBot(number) {
+    let element = document.getElementById('bord');
+    rollADie({ element, numberOfDice: number, callback: rollDiceResultBot, delay: 6000});
+}
+
+function rollDiceResultBot(res) {
+    let amount = res.reduce(function(a, b){
+        return a + b;
+    }, 0);
+
+    dealCardsBot(amount);
 }
