@@ -441,7 +441,7 @@ function validCard(card) {
 
     let lastCard = cardPile[cardPile.length - 1];
 
-    return (!lastCard || lastCard.type === card.type || lastCard.value === card.value || card.type === JOKER || card.value === "A");
+    return (!lastCard || lastCard.type === card.type || lastCard.value === card.value || card.type === JOKER || card.value === "A" || lastCard.type === JOKER || lastCard.value === "A");
 }
 
 function validCombination() {
@@ -641,6 +641,9 @@ function botsTurn() {
             }
 
             drawCards = null;
+
+            $("#draw-card-btn").html("Draw card");
+            $("#draw-card-btn").removeClass("wiebel invert");
         }, 1000);
     }
     
