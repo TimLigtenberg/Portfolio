@@ -47,6 +47,8 @@ let startTime;
 let timerInterval;
 
 $(function() {
+    $("#leaderboard").hide();
+
     let selectElement = $("#difficultySelect");
     DIFFICULTIES.forEach(difficultyI => {
         const option = $('<option>');
@@ -75,7 +77,7 @@ $(function() {
             option.prop('selected', true);
             theme = themeI;
         } else if(!savedTheme) {
-            if (themeI === DIFFICULTIES[0]) {
+            if (themeI === THEMES[0]) {
                 option.prop('selected', true);
                 theme = themeI;
             }
