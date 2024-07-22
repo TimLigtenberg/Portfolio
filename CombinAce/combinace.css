@@ -174,10 +174,6 @@
     left: 43%;
 }
 
-#draw-cards-text {
-    float: right;
-}
-
 #menu {
     /*display: inline-block;
     width: 160px;
@@ -221,4 +217,21 @@
 
 #show-rules {
     margin-left: 10px;
+}
+
+#hand-cards-bot1 {
+    position: absolute;
+    left: 5%;
+    top: 15%;
+    transform: translate(-50%, -50%) rotate(90deg);
+    display: flex;
+    align-items: flex-end;
+    overflow-x: auto;
+}
+
+#hand-cards-bot1 .cardd {
+    width: 60px;
+    min-width: 6px;
+    height: 90px;
+    min-height: 90px;
 }

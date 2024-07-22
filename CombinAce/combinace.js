@@ -15,9 +15,10 @@ const type_icon = {
 
 // HTML Elements
 let handCardsDiv;
+let handCardsDivBot1;
+let handCardsDivBot2;
 let cardPileDiv;
 let combinationDiv;
-let drawCardsText;
 let playCombinationBtn;
 let drawCardBtn;
 
@@ -27,6 +28,8 @@ let drawCards = null;
 let luckyNumber;
 // cards in hand
 let cards = [];
+let cardsBot1 = [];
+let cardsBot2 = [];
 let deck = [];
 let combinationCards = [];
 // placed cards
@@ -42,9 +45,10 @@ $(function() {
     // TODO: comments allemaal engels maken
 
     handCardsDiv = $('#hand-cards');//.sortable();
+    handCardsDivBot1 = $('#hand-cards-bot1');
+    handCardsDivBot2 = $('#hand-cards-bot2');
     cardPileDiv = $('#card-pile');
     combinationDiv = $('#combination');
-    drawCardsText = $('#draw-cards-amount').html(0);
     playCombinationBtn = $("#play-combination-btn");
     drawCardBtn = $("#draw-card-btn");
 
@@ -64,8 +68,9 @@ $(function() {
         $("#draw-buttons").css("display", "flex");
         $("#lucky-number").clone().appendTo("#menu");
         $("#lucky-number-container").remove();
-        setCards(1); // TODO: 2 decks
-        dealCards(40); // TODO: 15 cards
+        setCards(2);
+        dealCards(15);
+        dealCardsBots(15);
     }
 
     drawCardBtn.on('click', function(event) {
@@ -81,7 +86,6 @@ $(function() {
             }
 
             drawCards = null;
-            drawCardsText.html(0);
         }
 
         $(this).html("Draw card");
@@ -179,6 +183,31 @@ function dealCards(amount) {
     }
 }
 
+function dealCardsBots(amount) {
+    for (let i = 0; i < amount; i++) {
+        if(deck.length === 0) {
+            showFeedback("There are no more cards to draw.", "error");
+            break;
+        }
+
+        const randomIndex = Math.floor(Math.random() * deck.length);
+        const dealtCard = deck.splice(randomIndex, 1)[0];
+        cardsBot1.push(dealtCard);
+        handCardsDivBot1.append(getCardViewHidden(dealtCard));
+    }
+    for (let i = 0; i < amount; i++) {
+        if(deck.length === 0) {
+            showFeedback("There are no more cards to draw.", "error");
+            break;
+        }
+
+        const randomIndex = Math.floor(Math.random() * deck.length);
+        const dealtCard = deck.splice(randomIndex, 1)[0];
+        cardsBot2.push(dealtCard);
+        handCardsDivBot2.append(getCardViewHidden(dealtCard));
+    }
+}
+
 function getCardView(card) {
     let cardView = $('<div>');
     cardView.addClass(`cardd card-${card.value}`);
@@ -234,6 +263,13 @@ function getCardView(card) {
     return cardView;
 }
 
+function getCardViewHidden() {
+    let cardView = $('<div>');
+    cardView.addClass('cardd');
+    cardView.css("cursor", "pointer");
+    return cardView;
+}
+
 function playcard(card, combination = false) {
     if(!combination && !validCard(card)) {
         showFeedback("You can't play this card.", "error");
@@ -249,9 +285,8 @@ function playcard(card, combination = false) {
         } else {
             drawCards = { amount: 1, dice: true };
         }
-        drawCardBtn.html("Draw cards! <i class='fa-solid fa-dice'></i>");
+        drawCardBtn.html(`Draw ${drawCards.amount} cards! <i class='fa-solid fa-dice'></i>`);
         drawCardBtn.addClass("wiebel invert");
-        drawCardsText.html(`${drawCards.amount} <i class='fa-solid fa-dice'></i>`);
     }
     else if(card.type === JOKER || card.value === "A") {
         if(drawCards) {
@@ -261,9 +296,8 @@ function playcard(card, combination = false) {
             drawCards = { amount: 3, dice: false };
         }
         
-        drawCardBtn.html("Draw cards!");
+        drawCardBtn.html(`Draw ${drawCards.amount} cards!`);
         drawCardBtn.addClass("wiebel invert");
-        drawCardsText.html(drawCards.amount);
     }
     
 
