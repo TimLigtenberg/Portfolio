@@ -183,13 +183,6 @@
     margin-right: auto;
 }
 
-#draw-card-btn {
-
-}
-
-#draw-cards-btn {
-}
-
 #play-combination-btn {
     position: absolute;
     top: 5%;
@@ -205,6 +198,7 @@
     background-color: lightblue;
     display: flex;
     align-items: center;
+    justify-content: flex-start;
 }
 #player-turn {
     position: absolute;

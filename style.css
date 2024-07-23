@@ -16,6 +16,21 @@
     font-size: 25px;
 }
 
+.main {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10%;
+    font-family: Sans-serif;
+}
+
+.main .title {
+    font-weight: bold;
+    font-size: 40px;
+    margin-bottom: 20px;
+}
+
 #feedback {
     position: absolute;
     left: 50%;
@@ -92,4 +107,32 @@
         bottom: 70px;
         right: 15px;
     }
+}
+
+#project-list {
+    list-style: none;
+    padding: 0;
+}
+
+#project-list a {
+    font-size: 20px;
+    color: #009879;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+#project-list a:hover {
+    color: #00564d;
+}
+#project-list a span {
+    height: 100%;
+}
+
+#project-list li {
+    margin-bottom: 15px;
+}
+#project-list .project-icon {
+    height: auto;
+    width: 30px;
+    margin-right: 20px;
 }
