@@ -105,6 +105,7 @@ $(function() {
         if(drawCards === null && event.button == 0) {
             event.preventDefault();
             playCombination();
+            return;
         }
     });
 });
@@ -309,7 +310,10 @@ function playcard(card, combination = false) {
     });
 
     cardView.remove().appendTo(cardPileDiv);
-    nextPlayerTurn();
+
+    if(!combination) {
+        nextPlayerTurn();
+    }
 }
 
 function getCombinationPoints() {
@@ -437,9 +441,9 @@ function playCombination() {
 
     if(drawCards === null || drawCards.dice === true) {
         if(validCombination()) {
-            combinationCards.forEach(card => {
-                playcard(card, true);
-            });
+            for (let i = 0; i < combinationCards.length; i++) {
+                playcard(combinationCards[i], true);
+            }
     
             clearCombination();
             nextPlayerTurn();
@@ -468,12 +472,14 @@ function validCombination() {
 
 function validStraatje() {
     // TODO: van K naar A mogelijk maken
+    // TODO: A, JOKER, 2, 3, 4 werkt niet
+    // TODO: A, A, 2, 3, 4 werkt niet
     if (!combinationCards || combinationCards.length < 3) return false;
 
     let nonSpecialCards = combinationCards.filter(card => card.type !== "JOKER" && card.value !== "A");
     nonSpecialCards.sort((a, b) => a.cardNumber - b.cardNumber);
 
-    // sorteren op kaarnumber klein naar groot
+    // sorteren op kaartnumber klein naar groot
     combinationCards.sort((a, b) => a.cardNumber - b.cardNumber);
     const normalLowestCard = nonSpecialCards[0];
     const normalHighestCard = nonSpecialCards[nonSpecialCards.length - 1];
