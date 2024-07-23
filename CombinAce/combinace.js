@@ -42,9 +42,9 @@ $(function() {
     // TODO: duidelijker weergeven de totale punten van de combinatie
     // TODO: duidelijker weergeven dat de A helemaal naar rechts gesleept moet worden om er 12 punten van te maken
     // TODO: mooie dobbelstenen zelf maken
-    // TODO: alle kaarten in hand laten zien zonder te hoeven scrollen
-    // TODO: winnen
     // TODO: comments allemaal engels maken
+    // TODO: alle kaarten 'pile' laten zien en er zichtbaar één afhalen wanneer je een kaart pakt
+    // TODO: kaarten pakken en leggen met een mooie animatie doen
 
     handCardsDiv = $('#hand-cards');//.sortable();
     handCardsDivBot1 = $('#hand-cards-bot1');
@@ -69,8 +69,8 @@ $(function() {
     function initialize() {
         getLuckyNumber();
         $("#draw-buttons").css("display", "flex");
-        $("#lucky-number").clone().appendTo("#menu");
-        $("#lucky-number-container").remove();
+        //$("#lucky-number").clone().appendTo("#menu");
+        
         setCards(2);
         dealCards(15);
         dealCardsBots(8); // TODO: 15
@@ -111,7 +111,18 @@ $(function() {
 function getLuckyNumber() {
     luckyNumber = Math.floor(Math.random() * (36 - 3 + 1)) + 3;
     $('#lucky-number-btn').remove();
-    $('#lucky-number').text(luckyNumber);
+    let luckyNumberText = $('#lucky-number');
+    luckyNumberText.text(luckyNumber);
+    luckyNumberText.appendTo("#lucky-number-container");
+
+    setTimeout(function() {
+        $("#lucky-number-container").fadeOut('slow');
+        luckyNumberText.fadeOut('slow', function() {
+            $(this).appendTo("#menu").fadeIn('slow');
+            luckyNumberText.html(`<span style='color: black; text-shadow: none;'>Your lucky number: </span>${luckyNumber}`);
+            luckyNumberText.css('margin', 'auto');
+        });
+    }, 500);
 }
 
 function rollDiceToDraw(number) {
@@ -198,18 +209,23 @@ function getCardView(card) {
 
     if(card.type === JOKER) {
         let cardValue = $(`<span class="card-value card-value-${card.value}">${card.value}</span>`);
+        let cardValueSmall = $(`<span class="card-value-small card-value-${card.value}">?</span>`);
         cardView.append(cardValue);
+        cardView.append(cardValueSmall);
     } else {
         let iconCornerTopLeft = $(`<span class="top-left card-icon card-icon-${card.type}">${type_icon[card.type]}</span>`);
         let iconCornerBottomRight = $(`<span class="bottom-right card-icon card-icon-${card.type}">${type_icon[card.type]}</span>`);
         let cardValue = $(`<span class="card-value card-value-${card.type}">${card.value}</span>`);
+        let cardValueSmall = $(`<span class="card-value-small card-value-${card.type}">${card.value}</span>`);
         if(card.value === 'A') {
             cardValue.removeClass().addClass("card-value card-value-A");
+            cardValueSmall.removeClass().addClass("card-value-small card-value-A");
         }
     
         cardView.append(iconCornerTopLeft);
         cardView.append(iconCornerBottomRight);
         cardView.append(cardValue);
+        cardView.append(cardValueSmall);
     }
     
     // left mouse button click
@@ -449,19 +465,6 @@ function validCombination() {
     return (validStraatje() || validxOfaKind());
 }
 
-function nextPlayerTurn() {
-    console.log(playerTurn);
-    playerTurn = (playerTurn % 3) + 1;
-
-    if(playerTurn === 1) $("#player-turn").html("It's your turn");
-    else if(playerTurn === 2) $("#player-turn").html("It's bot1's turn");
-    else if(playerTurn === 3) $("#player-turn").html("It's bot2's turn");
-
-    if(playerTurn === 2 || playerTurn === 3) {
-        botsTurn();
-    }
-}
-
 function validStraatje() {
     // TODO: van K naar A mogelijk maken
     if (!combinationCards || combinationCards.length < 3) return false;
@@ -563,6 +566,64 @@ function validxOfaKind() {
     return totalPoints === luckyNumber;
 }
 
+function nextPlayerTurn() {
+    checkPlayerWon();
+
+    playerTurn = (playerTurn % 3) + 1;
+
+    if(playerTurn === 1) $("#player-turn").html("It's your turn");
+    else if(playerTurn === 2) $("#player-turn").html("It's bot Marco's turn");
+    else if(playerTurn === 3) $("#player-turn").html("It's bot Willard's turn");
+
+    if(playerTurn === 2 || playerTurn === 3) {
+        botsTurn();
+    }
+}
+
+function checkPlayerWon() {
+    if(playerTurn === 1) {
+        if(cards.length === 0) {
+            endGame(playerTurn);
+        }
+    }
+    else if(playerTurn === 2) {
+        if(cardsBot1.length === 0) {
+            endGame(playerTurn);
+        }
+    }
+    else if(playerTurn === 3) {
+        if(cardsBot2.length === 0) {
+            endGame(playerTurn);
+        }
+    }
+}
+
+function endGame(winner) {
+    let endGameText = $('<span id="endgame-text"></span>');
+    let endGameBtn = $('<button class="blue-button wiebel invert">Click here to start a new game</button>');
+    endGameBtn.click(function() {
+        location.reload();
+    });
+
+    if(winner === 1) {
+        endGameText.html("You won!");
+        endGameText.css("color", "green");
+    }
+    else if(winner === 2) {
+        endGameText.html("Bot Marco won!");
+        endGameText.css("color", "red");
+    }
+    else if(winner === 3) {
+        endGameText.html("Bot Willard won!");
+        endGameText.css("color", "red");
+    }
+
+    let endgameDiv = $('<div id="endgame-div"></div>');
+    endGameText.appendTo(endgameDiv);
+    endGameBtn.appendTo(endgameDiv);
+    endgameDiv.appendTo('body');
+}
+
 // BOT FUNCTIONALITIES
 
 function dealCardsBots(amount) {
@@ -612,18 +673,23 @@ function getCardViewBot(card) {
 
     if(card.type === JOKER) {
         let cardValue = $(`<span class="card-value card-value-${card.value}">${card.value}</span>`);
+        let cardValueSmall = $(`<span class="card-value-small card-value-${card.value}">?</span>`);
         cardView.append(cardValue);
+        cardView.append(cardValueSmall);
     } else {
         let iconCornerTopLeft = $(`<span class="top-left card-icon card-icon-${card.type}">${type_icon[card.type]}</span>`);
         let iconCornerBottomRight = $(`<span class="bottom-right card-icon card-icon-${card.type}">${type_icon[card.type]}</span>`);
         let cardValue = $(`<span class="card-value card-value-${card.type}">${card.value}</span>`);
+        let cardValueSmall = $(`<span class="card-value-small card-value-${card.type}">${card.value}</span>`);
         if(card.value === 'A') {
             cardValue.removeClass().addClass("card-value card-value-A");
+            cardValueSmall.removeClass().addClass("card-value-small card-value-A");
         }
     
         cardView.append(iconCornerTopLeft);
         cardView.append(iconCornerBottomRight);
         cardView.append(cardValue);
+        cardView.append(cardValueSmall);
     }
     
     cardView.css("cursor", "pointer");
@@ -632,35 +698,36 @@ function getCardViewBot(card) {
 }
 
 function botsTurn() {
-    if(drawCards !== null) {
-        setTimeout(function() {
-            if(drawCards.dice) {
-                rollDiceToDrawBot(drawCards.amount);
-            } else {
-                dealCardsBot(drawCards.amount);
-            }
+    let cardPlayed = false;
 
-            drawCards = null;
-
-            $("#draw-card-btn").html("Draw card");
-            $("#draw-card-btn").removeClass("wiebel invert");
-        }, 1000);
-    }
-    
     setTimeout(function() {
         if(playerTurn === 2) {
-            let cardPlayed = botPlayCardIfPossible(cardsBot1);
-            
-            if(!cardPlayed) {
-                drawCardBot();
-            }
+            cardPlayed = botPlayCardIfPossible(cardsBot1);
         }
         else if (playerTurn === 3) {
-            let cardPlayed = botPlayCardIfPossible(cardsBot2);
-            
-            if(!cardPlayed) {
-                drawCardBot();
-            }
+            cardPlayed = botPlayCardIfPossible(cardsBot2);
+        }
+
+        if(!cardPlayed) {
+            setTimeout(function() {
+                if(drawCards !== null) {
+                    if(drawCards.dice) {
+                        rollDiceToDrawBot(drawCards.amount);
+                    } else {
+                        dealCardsBot(drawCards.amount);
+                    }
+        
+                    drawCards = null;
+        
+                    $("#draw-card-btn").html("Draw card");
+                    $("#draw-card-btn").removeClass("wiebel invert");
+
+                    // bot had to draw some cards but still still has to do his turn
+                    botsTurn();
+                } else {
+                    drawCardBot();
+                }
+            }, 1000);
         }
     }, 1000);
 }

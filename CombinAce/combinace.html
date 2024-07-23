@@ -49,11 +49,8 @@
 
             <header id="menu" class="ui-widget-content">
                 <a id="show-rules" href="regels.txt" target="_blank">Show rules</a>
-                <!--<div id="rules-object-container">
-                    <object id="rules-object" data="regels.txt" type="text/plain"></object>
-                </div>-->
-                <span id="player-turn"></span>
             </header>
+            <span id="player-turn"></span>
 
             <div id="lucky-number-container">
                 <span id="lucky-number-label">Your lucky number</span>
@@ -63,7 +60,7 @@
             </div>
 
             <div id="bord">
-                <button id="play-combination-btn" class="blue-button wiebel" style="display: none;">Play combination</button>
+                <button id="play-combination-btn" class="blue-button wiebel invert" style="display: none;">Play combination</button>
                 <div id="combination" style="display: none;"></div>
                 <div id="card-pile"></div>
                 <div id="draw-buttons" style="display: none;">
@@ -71,8 +68,14 @@
                 </div>
                 <div id="hand-cards"></div>
 
-                <div id="hand-cards-bot1" class="hand-cards-bot"></div>
-                <div id="hand-cards-bot2" class="hand-cards-bot" style="display: none;"></div>
+                <div id="bot1">
+                    <div id="hand-cards-bot1" class="hand-cards-bot"></div>
+                    <span id="name-bot1">Bot Marco</span>
+                </div>
+                <div id="bot2">
+                    <div id="hand-cards-bot2" class="hand-cards-bot"></div>
+                    <span id="name-bot2">Bot Willard</span>
+                </div>
             </div>
         </div>
     </body>
