@@ -45,6 +45,7 @@ $(function() {
     // TODO: comments allemaal engels maken
     // TODO: alle kaarten 'pile' laten zien en er zichtbaar één afhalen wanneer je een kaart pakt
     // TODO: kaarten pakken en leggen met een mooie animatie doen
+    // TODO: regels.txt ANDERE SPECIALE KAARTEN EN REGELS implementeren
 
     handCardsDiv = $('#hand-cards');//.sortable();
     handCardsDivBot1 = $('#hand-cards-bot1');
@@ -594,7 +595,7 @@ function checkPlayerWon() {
     else if(playerTurn === 3) {
         if(cardsBot2.length === 0) {
             endGame(playerTurn);
-        }
+    }
     }
 }
 

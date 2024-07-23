@@ -1,0 +1,66 @@
+PREPARATION AND GAME EXPLANATION:
+
+1. Each player gets a random number from 3 to 36, that’s your lucky number.
+2. Each player gets 15 cards. The game contains two normal decks of cards.
+3. One card is laid down and the game begins.
+    The player who starts must lay down a card that has the same suit as the card or the same number/letter.
+    If they can’t, they must draw a card. This can be laid down immediately if possible.
+4. The next player does the same and so on.
+5. In addition to a matching card, a player can also lay down a COMBINATION*.
+6. The game is over when a player no longer has any cards and also does not have to draw any cards.
+Further rules of cards are under the heading OTHER SPECIAL CARDS AND RULES.
+
+
+COMBINATIONS*:
+
+The combination may be more than 2 cards of the same number or letter of different suits, or more than 2 cards with consecutive numbers of the same suit.
+The combination may only be laid down if the points of all cards added together correspond to your lucky number.
+
+Jack, queen, and king count as 11 points. Ace counts as 1 or 12 points, you can decide for yourself.
+Joker counts as extra/missing card.
+
+Straight: ♦A + ♦2 + ♦3
+3 of a kind: ♣10 + ♦10 + ♥10
+
+USE OF ACE (Ace is 1 or 12) The Ace can always be used.
+If the Ace is used in combinations, it does not have to match the combination.
+To be able to use the Ace, the combination must already be correct and consist of at least 2 cards.
+The Ace can be used to increase the total points of your combination by 1 or 12 to reach your lucky number.
+There is no maximum on the number of Aces you can use in a combination.
+♦2 + ♦3 + ♦4 + ♣A♦A♥A♠A = 10 or 21 points
+♣5 + ♦5 + ♥5 + ♣A♦A♥A♠A = 16 or 27 points
+♦2 + ♦3 + ♦4 + ♣A + ♦A = 11, 22 or 33 points
+♦V + ♦K + ♦A + ♣A = 35 or 46 points
+
+BUT if you use an Ace in a straight, it counts as 12 behind the King or as 1 before the 2
+♣A + ♣2 + ♣3 = 6 points
+♣K + ♣A + ♣2 + ♣3 = 17 points
+
+USE OF THE JOKER (Joker is extra/missing card) The joker can always be used, also in combinations.
+There may only be a maximum of 1 joker in a combination.
+♦2 + JOKER + ♦4 = 9 points
+♣10 + ♦10 + JOKER = 30 points
+
+
+DRAWING CARDS:
+
+If a combination has been thrown, the next player must draw cards unless they also lay down a combination.
+If you have to draw, you throw the number of cards in the combination of normal dice to determine how many cards you have to draw.
+If someone throws a straight with an Ace to get to their starting number (e.g. ♦2 + ♦3 + ♦4 + ♠A), the next player must throw 4 dice and draw the sum of them in cards.
+
+If you throw an Ace or JOKER as a single card, the next player must draw cards.
+With a 2 you skip drawing through jokers and Aces, so you go on to the next but no extra cards are added.
+An Ace, a 2 and a joker may always be thrown one after the other until a player no longer lays down a card.
+This player must draw cards. The person who has to draw, draws 3 cards per laid Ace and joker.
+If 2s have been laid, these are not added.
+
+If there are no more cards on the draw pile, the laid cards may be shuffled and made into a new draw pile. Only the last laid card must remain
+
+OTHER SPECIAL CARDS AND RULES:
+
+- WITH UNO (when you have exactly the same card in your hand as a card that is thrown, you may lay it down immediately and the game continues to the person who is next in turn)
+- You don't have to say it when you only have one card left.
+- If you play a 7, it’s your turn again
+- If you play an 8, the next player must skip a turn
+- If you play a JACK, you can choose what type of card it becomes
+- If you play a KING, the game continues in the opposite direction
