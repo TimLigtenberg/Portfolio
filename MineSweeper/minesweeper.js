@@ -48,7 +48,9 @@ let timerInterval;
 
 $(function() {
     $(window).on('beforeunload', function(){
-        return 'Are you sure you want to leave this page? Your current game will not be saved';
+        if (startTime) {
+            return 'Are you sure you want to leave this page? Your current game will not be saved';
+        }
     });
 
     let selectElement = $("#difficultySelect");
