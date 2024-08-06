@@ -283,7 +283,7 @@ function playcard(card, combination = false) {
         } else {
             drawCards = { amount: 1, dice: true };
         }
-        drawCardBtn.html(`Draw ${drawCards.amount} cards! <i class='fa-solid fa-dice'></i>`);
+        drawCardBtn.html(`Draw ${drawCards.amount}x <i class='fa-solid fa-dice'></i> cards!`);
         drawCardBtn.addClass("wiebel invert");
     }
     else if(card.type === JOKER || card.value === "A") {

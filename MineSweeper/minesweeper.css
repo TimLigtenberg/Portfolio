@@ -1,13 +1,10 @@
-.main {
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    flex-direction: column !important;
-    margin: 30px;
+.minesweeper-main > * {
+    display: block;
 }
 
-.main > * {
-    display: block;
+.minesweeper-main {
+    margin: 200px 20px 20px 20px;
+    text-align: center;
 }
 
 * {

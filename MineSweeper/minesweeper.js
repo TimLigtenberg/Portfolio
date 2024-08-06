@@ -47,7 +47,9 @@ let startTime;
 let timerInterval;
 
 $(function() {
-    $("#leaderboard").hide();
+    $(window).on('beforeunload', function(){
+        return 'Are you sure you want to leave this page? Your current game will not be saved';
+    });
 
     let selectElement = $("#difficultySelect");
     DIFFICULTIES.forEach(difficultyI => {
@@ -121,6 +123,7 @@ $(function() {
 
     initialize();
     setLeaderboard();
+    $('#leaderboard').hide();
 });
 
 function initialize() {
