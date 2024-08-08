@@ -3,8 +3,9 @@
 }
 
 .minesweeper-main {
-    margin: 200px 20px 20px 20px;
     text-align: center;
+    position: relative;
+    top: 200px;
 }
 
 * {
@@ -19,6 +20,7 @@ hr {
 body.game-won {
     animation: win-animation 3s ease-in-out forwards;
 }
+
 @keyframes win-animation {
     0% { transform: scale(1); background-color: transparent; }
     15% { transform: scale(1.05); background-color: rgb(112, 18, 9); }

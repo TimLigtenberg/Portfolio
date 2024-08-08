@@ -14,9 +14,10 @@ const DIFFICULTIES = [DIFFICULTY_EASY, DIFFICULTY_NORMAL, DIFFICULTY_HARD];
 const THEME_NORMAL = "Old school";
 const THEME_SPACE = "Space";
 const THEME_BINARY = "Binary";
+const THEME_SUDOKU = "Sweepudoku";
 
-const THEMES = [THEME_NORMAL, THEME_SPACE, THEME_BINARY];
-const SPECIAL_THEMES = [THEME_BINARY];
+const THEMES = [THEME_NORMAL, THEME_SPACE, THEME_BINARY]; // THEME_SUDOKU
+const SPECIAL_THEMES = [THEME_BINARY, THEME_SUDOKU];
 
 const MINE = "mine";
 const NUMBER = "number";
@@ -29,7 +30,7 @@ const difficultyBlockRowAmount = {
 };
 
 const difficultyMineAmount = {
-    [DIFFICULTY_EASY]: 15,
+    [DIFFICULTY_EASY]: 1,
     [DIFFICULTY_NORMAL]: 40,
     [DIFFICULTY_HARD]: 120
 };
@@ -47,6 +48,7 @@ let startTime;
 let timerInterval;
 
 $(function() {
+    // TODO: Sudoku minesweeper mix
     $(window).on('beforeunload', function(){
         if (startTime) {
             return 'Are you sure you want to leave this page? Your current game will not be saved';
@@ -129,8 +131,14 @@ $(function() {
 });
 
 function initialize() {
-    blockAmount = difficultyBlockRowAmount[difficulty];
-    mineAmount = difficultyMineAmount[difficulty];
+    if (theme === THEME_SUDOKU) {
+        blockAmount = difficultyBlockRowAmount[difficulty];
+        mineAmount = blockAmount;
+    } else {
+        blockAmount = difficultyBlockRowAmount[difficulty];
+        mineAmount = difficultyMineAmount[difficulty];
+    }
+
     numberBlocksLeft = blockAmount * blockAmount - mineAmount;
     numberMinesLeft = mineAmount;
     
@@ -166,20 +174,35 @@ function initialize() {
 
 function placeMines(blockId) {
     let minesToPlace = mineAmount;
-    
-    for (let i = 0; i < minesToPlace; i++) {
-        let row = Math.floor(Math.random() * (blocks.length));
-        let column = Math.floor(Math.random() * (blocks[0].length));
-        let block = blocks[row][column];
-        if(block.type !== MINE && block.id !== blockId) {
-            block.type = MINE;
-        } else {
-            minesToPlace++;
-        }
-    }
 
-    // setting the numbers of the other blocks. If block is not surrounded by a mine, turn into a BLANK block
-    setBlockNumbers();
+    if(theme === THEME_SUDOKU) {
+        // every row should have one mine and never on the same column
+        let columnsWithoutBomb = [];
+        for (let i = 0; i < minesToPlace; i++) {
+            let row = Math.floor(Math.random() * (blocks.length));
+            let column = Math.floor(Math.random() * (blocks[0].length));
+            let block = blocks[row][column];
+            if(block.type !== MINE && block.id !== blockId && !columnsWithoutBomb.includes(column)) {
+                block.type = MINE;
+                columnsWithoutBomb.push(column);
+            } else {
+                minesToPlace++;
+            }
+        }
+    } else {
+        for (let i = 0; i < minesToPlace; i++) {
+            let row = Math.floor(Math.random() * (blocks.length));
+            let column = Math.floor(Math.random() * (blocks[0].length));
+            let block = blocks[row][column];
+            if(block.type !== MINE && block.id !== blockId) {
+                block.type = MINE;
+            } else {
+                minesToPlace++;
+            }
+        }
+        // setting the numbers of the other blocks. If block is not surrounded by a mine, turn into a BLANK block
+        setBlockNumbers();
+    }
 }
 
 function setBlockNumbers() {
@@ -445,6 +468,7 @@ function gameOver() {
     $("#bord").off("click").find("*").off("click");
 
     setTimeout(function() {
+        startTime = null;
         location.reload();
     }, 2000);
 }
@@ -478,6 +502,7 @@ function gameWon() {
     $("body").addClass("game-won");
     
     setTimeout(function() {
+        startTime = null;
         alert(alertText + "\nClick OK to restart.");
         location.reload();
     }, 3000);
