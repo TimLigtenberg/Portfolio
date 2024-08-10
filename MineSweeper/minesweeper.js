@@ -30,7 +30,7 @@ const difficultyBlockRowAmount = {
 };
 
 const difficultyMineAmount = {
-    [DIFFICULTY_EASY]: 1,
+    [DIFFICULTY_EASY]: 12,
     [DIFFICULTY_NORMAL]: 40,
     [DIFFICULTY_HARD]: 120
 };
