@@ -47,7 +47,7 @@ $(function() {
     // TODO: kaarten pakken en leggen met een mooie animatie doen
     // TODO: regels.txt ANDERE SPECIALE KAARTEN EN REGELS implementeren
 
-    handCardsDiv = $('#hand-cards');//.sortable();
+    handCardsDiv = $('#hand-cards').sortable();
     handCardsDivBot1 = $('#hand-cards-bot1');
     handCardsDivBot2 = $('#hand-cards-bot2');
     cardPileDiv = $('#card-pile');
@@ -73,7 +73,7 @@ $(function() {
         //$("#lucky-number").clone().appendTo("#menu");
         
         setCards(2);
-        dealCards(15);
+        dealCards(25); // TODO: 15
         dealCardsBots(8); // TODO: 15
     }
 
@@ -202,6 +202,24 @@ function dealCards(amount) {
         cards.push(dealtCard);
         handCardsDiv.append(getCardView(dealtCard));
     }
+
+    let testCard1 = deck.splice(deck.findIndex(card => card.type == JOKER), 1)[0];
+    let testCard2 = deck.splice(deck.findIndex(card => card.type == JOKER), 1)[0];
+    let testCard3 = deck.splice(deck.findIndex(card => card.value == "A"), 1)[0];
+    let testCard4 = deck.splice(deck.findIndex(card => card.value == "A"), 1)[0];
+    let testCard5 = deck.splice(deck.findIndex(card => card.value == "A"), 1)[0];
+
+    cards.push(testCard1);
+    cards.push(testCard2);
+    cards.push(testCard3);
+    cards.push(testCard4);
+    cards.push(testCard5);
+
+    handCardsDiv.append(getCardView(testCard1));
+    handCardsDiv.append(getCardView(testCard2));
+    handCardsDiv.append(getCardView(testCard3));
+    handCardsDiv.append(getCardView(testCard4));
+    handCardsDiv.append(getCardView(testCard5));
 }
 
 function getCardView(card) {
@@ -337,10 +355,10 @@ function getCombinationPoints() {
 
 function addToCombination(card) {
     if(drawCards !== null) return;
-    if(card.type === JOKER && combinationCards.find(card => card.type === "JOKER")) {
-        showFeedback("You can't use more than one joker in a combination", "error");
-        return;
-    }
+    //if(card.type === JOKER && combinationCards.find(card => card.type === JOKER)) {
+    //    showFeedback("You can't use more than one joker in a combination", "error");
+    //    return;
+    //}
 
     let cardView = $(`#${card.id}`);
 
@@ -472,11 +490,12 @@ function validCombination() {
 
 function validStraatje() {
     // TODO: van K naar A mogelijk maken
-    // TODO: A, JOKER, 2, 3, 4 werkt niet
+    // TODO: A, JOKER, 2, 3, 4 werkt niet. 21-09-2024 JOKER bugfix. werkt nu misschien wel
     // TODO: A, A, 2, 3, 4 werkt niet
-    if (!combinationCards || combinationCards.length < 3) return false;
+    // TODO: A, A, 5, 6, JOKER werkt niet. 21-09-2024 JOKER bugfix. werkt nu misschien wel
+    if (!combinationCards || combinationCards.length < 3) { alert("a"); return false; }
 
-    let nonSpecialCards = combinationCards.filter(card => card.type !== "JOKER" && card.value !== "A");
+    let nonSpecialCards = combinationCards.filter(card => card.type !== JOKER && card.value !== "A");
     nonSpecialCards.sort((a, b) => a.cardNumber - b.cardNumber);
 
     // sorteren op kaartnumber klein naar groot
@@ -484,14 +503,15 @@ function validStraatje() {
     const normalLowestCard = nonSpecialCards[0];
     const normalHighestCard = nonSpecialCards[nonSpecialCards.length - 1];
     // alle kaarten zijn A's, of alleen A's en een joker
-    if(!normalLowestCard) return false;
+    if(!normalLowestCard) { alert("b"); return false; }
     let totalPoints = combinationCards.find(card => card.value !== "A").points;
 
     let sameType = true;
-    combinationCards.forEach(card => {
-        if (card.type !== normalLowestCard.type && card.value !== "A") sameType = false;
+    nonSpecialCards.forEach(card => {
+        if (card.type !== normalLowestCard.type) sameType = false;
     });
     if (!sameType) {
+        alert("c");
         return false;
     }
 
@@ -522,10 +542,12 @@ function validStraatje() {
                 } else if (pointsHighest !== null && totalPoints + pointsHighest === luckyNumber) {
                     return true;
                 } else {
+                    alert("d");
                     return false;
                 }
             // als het geen geldig straatje is
             } else {
+                alert("e");
                 return false;
             }
         // als volgende kaart wel opeenvolgend is met huidige kaart
@@ -535,13 +557,15 @@ function validStraatje() {
         }
     }
 
+    if (totalPoints !== luckyNumber) alert("f");
+
     return totalPoints === luckyNumber;
 }
 
 function validxOfaKind() {
     if(combinationCards.length < 3) return false;
 
-    let nonSpecialCards = combinationCards.filter(card => card.type !== "JOKER" && card.value !== "A");
+    let nonSpecialCards = combinationCards.filter(card => card.type !== JOKER && card.value !== "A");
     // TODO: je mag nu niet een combinatie hebben van alleen maar As (en een joker). moet wel kunnen
     if(nonSpecialCards.length === 0) return false;
 
