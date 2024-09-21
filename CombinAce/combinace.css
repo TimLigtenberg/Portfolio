@@ -283,3 +283,17 @@
     font-size: 30px;
     font-weight: bold;
 }
+
+#sortBtnsDiv {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+#sortBtnsDiv button {
+    font-size: small;
+    background: white;
+}

@@ -811,3 +811,44 @@ function rollDiceResultBot(res) {
 
     dealCardsBot(amount);
 }
+
+// function to sort all cards in hand.
+// sortMethod 1: sort by number (A, K , ... 4, 3, 2)
+// sortMethod 2: sort by type (hearts, spades, clubs, diamonds)
+function sortCardsInHand(sortMethod) {
+    let filteredCards = cards.filter(card => 
+        !combinationCards.some(combinationCard => 
+            combinationCard.id === card.id
+        )
+    );
+
+    let sortedCards = [];
+
+    // sort by number
+    if (sortMethod === 1) {
+        sortedCards = filteredCards.sort((a, b) => a.cardNumber - b.cardNumber);
+    }
+
+    // sort by type
+    else if (sortMethod === 2) {
+        sortedCards = filteredCards.sort((a, b) => {
+            if (a.type === b.type) {
+                return a.cardNumber - b.cardNumber; // Sort by number if types are the same
+            } else {
+                return a.type.localeCompare(b.type); // Sort by type
+            }
+        });
+    }
+
+    // invalid sort method
+    else {
+        sortedCards = filteredCards;
+    }
+
+    handCardsDiv.empty();
+    sortedCards.forEach(sortedCard => {
+        handCardsDiv.append(getCardView(sortedCard));
+    });
+
+    console.log("sortedCards", sortedCards);
+}
