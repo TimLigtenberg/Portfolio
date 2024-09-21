@@ -30,7 +30,7 @@ const difficultyBlockRowAmount = {
 };
 
 const difficultyMineAmount = {
-    [DIFFICULTY_EASY]: 12,
+    [DIFFICULTY_EASY]: 15,
     [DIFFICULTY_NORMAL]: 40,
     [DIFFICULTY_HARD]: 120
 };
@@ -174,19 +174,21 @@ function initialize() {
 
 function placeMines(blockId) {
     let minesToPlace = mineAmount;
+    console.log(minesToPlace);
 
     if(theme === THEME_SUDOKU) {
         // every row should have one mine and never on the same column
         let columnsWithoutBomb = [];
         for (let i = 0; i < minesToPlace; i++) {
-            let row = Math.floor(Math.random() * (blocks.length));
-            let column = Math.floor(Math.random() * (blocks[0].length));
-            let block = blocks[row][column];
-            if(block.type !== MINE && block.id !== blockId && !columnsWithoutBomb.includes(column)) {
-                block.type = MINE;
-                columnsWithoutBomb.push(column);
-            } else {
-                minesToPlace++;
+            while(true) {
+                let row = Math.floor(Math.random() * (blocks.length));
+                let column = Math.floor(Math.random() * (blocks[0].length));
+                let block = blocks[row][column];
+                if(block.type !== MINE && block.id !== blockId && !columnsWithoutBomb.includes(column)) {
+                    block.type = MINE;
+                    columnsWithoutBomb.push(column);
+                    break;
+                }
             }
         }
     } else {
