@@ -16,7 +16,7 @@ const THEME_SPACE = "Space";
 const THEME_BINARY = "Binary";
 const THEME_SUDOKU = "Sweepudoku";
 
-const THEMES = [THEME_NORMAL, THEME_SPACE, THEME_BINARY]; // THEME_SUDOKU
+const THEMES = [THEME_NORMAL, THEME_SPACE, THEME_BINARY, THEME_SUDOKU];
 const SPECIAL_THEMES = [THEME_BINARY, THEME_SUDOKU];
 
 const MINE = "mine";
@@ -191,6 +191,8 @@ function placeMines(blockId) {
                 }
             }
         }
+
+        setBlockNumbers();
     } else {
         for (let i = 0; i < minesToPlace; i++) {
             let row = Math.floor(Math.random() * (blocks.length));
@@ -293,6 +295,8 @@ function clickBlock(blockId) {
     let blockOverlayElement = $(`#${blockOverlayId}`);
     let block = getBlockObject(blockId);
 
+    console.log("blockId", blockId);
+
     if(!blockIsFlagged(blockOverlayId)) {
         if(!block.revealed) {
             blockOverlayElement.remove();
@@ -309,6 +313,7 @@ function clickBlock(blockId) {
                 timerInterval = setInterval(updateTimer, 100);
             }
 
+            console.log("block.type", block.type);
             if(block.type === NUMBER) {
                 blockContent.text(block.number);
                 blockContent.css("color", block.color);
