@@ -553,10 +553,10 @@ function validxOfaKind() {
     
     combinationCards.forEach(card => {
         if (card.value !== sameValue && card.type !== JOKER && card.value !== "A") {
-            alert("geen 1");
+            console.error("geen 1");
             return false;
         } else if (pastTypes.includes(card.type) || xOfaKind > 4) {
-            alert("geen 2");
+            console.error("geen 2");
             return false;
         } else if(card.type === JOKER && xOfaKind <= 3) {
             totalPoints += cardPoints;

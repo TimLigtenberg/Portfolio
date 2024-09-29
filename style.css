@@ -41,6 +41,7 @@
 #feedback {
     position: absolute;
     left: 50%;
+    top: 0;
     transform: translate(-50%, 0);
     width: 50%;
     border: 1px rgb(215, 90, 90) solid;

@@ -286,11 +286,11 @@
 
 #sortBtnsDiv {
     display: flex;
-    align-items: flex-end;
     justify-content: center;
+    gap: 10px;
     position: absolute;
     bottom: 0;
-    width: 100%;
+    margin-left: calc(50% - 100px);
 }
 
 #sortBtnsDiv button {
