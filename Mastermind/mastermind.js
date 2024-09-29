@@ -67,6 +67,7 @@ $(function() {
 });
 
 function initialize() {
+    numberTriesLeft = difficultyTriesAmount[difficulty];
     $('#tries-left').text(numberTriesLeft);
     clearInterval(timerInterval);
     $('#timer').text("00:00:00");
