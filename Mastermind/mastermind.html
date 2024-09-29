@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Minesweeper - Tim Ligtenberg</title>
+    <title>Mastermind - Tim Ligtenberg</title>
     <link rel="stylesheet" href="../style.css">
-    <link rel="stylesheet" href="minesweeper.css">
-    <link rel="icon" href="../assets/bomb.png" type="image/x-icon">
+    <link rel="stylesheet" href="mastermind.css">
+    <link rel="icon" href="../assets/mastermind/MastermindPinCyaan.png" type="image/x-icon">
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
@@ -17,7 +17,7 @@
     <script src="https://kit.fontawesome.com/fadd34b0e1.js" crossorigin="anonymous"></script>
 
     <script src="../index.js"></script>
-    <script src="minesweeper.js"></script>
+    <script src="mastermind.js"></script>
   </head>
   <body>
     <header class="header">
@@ -28,11 +28,6 @@
       <div class="header-item-container">
         <span class="header-item-title">Difficulty</span>
         <select class="header-item-value" id="difficultySelect" name="difficultySelect" title="Select difficulty"></select>
-      </div>
-
-      <div class="header-item-container">
-        <span class="header-item-title">Theme</span>
-        <select class="header-item-value" id="themeSelect" name="themeSelect" title="Select theme"></select>
       </div>
 
       <div class="header-item-container">
@@ -51,10 +46,10 @@
       </div>
     </header>
     
-    <div class="minesweeper-main">
+    <div class="mastermind-main">
       <div class="row" style="margin-right: 0px;">
         <div class="col-md-12">
-          <h1>Mines left: <span id="mines-left"></span></h1>
+          <h1>Tries left: <span id="tries-left"></span></h1>
           <div id="bord"></div>
         </div>
       </div>

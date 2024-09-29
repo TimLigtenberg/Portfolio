@@ -1,0 +1,41 @@
+.mastermind-main > * {
+    display: block;
+}
+
+.mastermind-main {
+    text-align: center;
+    position: relative;
+    top: 200px;
+}
+
+* {
+    user-select: none;
+}
+
+hr {
+    border: none !important;
+    border-top: 1px solid rgb(122, 120, 120) !important;
+    margin: 20px 0 !important;
+}
+
+#difficultySelect, #themeSelect {
+    background-color: #333;
+    color: white;
+    border: 1px white solid;
+    padding: 5px;
+}
+#showGamesBtn {
+    background-color: #333;
+    color: white;
+    border: 1px white solid;
+    padding: 5px 10px;
+}
+#leaderboard {
+    position: absolute;
+    right: 0;
+    margin: 20px;
+    padding: 40px;
+    z-index: 9;
+    background-color: #333;
+    white-space: nowrap;
+}
