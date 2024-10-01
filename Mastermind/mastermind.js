@@ -60,6 +60,22 @@ $(function() {
     
         initialize();
     });
+    
+    $('.pin').on('dragstart', function(e) {
+        e.originalEvent.dataTransfer.setData('text/plain', this.id);
+    });
+
+    $('#dropzone').on('dragover', function(e) {
+        e.preventDefault();
+    });
+
+    $('#dropzone').on('drop', function(e) {
+        e.preventDefault();
+        var id = e.originalEvent.dataTransfer.getData('text/plain');
+        var item = $('#' + id);
+        alert('#' + id);
+        $(this).append(item);
+    });
 
     initialize();
     setLeaderboard();
