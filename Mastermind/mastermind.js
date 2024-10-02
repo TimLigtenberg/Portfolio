@@ -1,19 +1,6 @@
-const DIFFICULTY_EASY = "Easy";
-const DIFFICULTY_NORMAL = "Normal";
-const DIFFICULTY_HARD = "Hard";
-
-const DIFFICULTIES = [DIFFICULTY_EASY, DIFFICULTY_NORMAL, DIFFICULTY_HARD];
-
-const difficultyTriesAmount = {
-    [DIFFICULTY_EASY]: 15,
-    [DIFFICULTY_NORMAL]: 10,
-    [DIFFICULTY_HARD]: 8
-};
-
 const wonGamesKey = btoa('wonGamesMastermind');
 
-let difficulty;
-let numberTriesLeft;
+let numberTriesLeft = 10;
 let startTime;
 let timerInterval;
 
@@ -24,24 +11,6 @@ $(function() {
         }
     });
 
-    let selectElement = $("#difficultySelect");
-    DIFFICULTIES.forEach(difficultyI => {
-        const option = $('<option>');
-        option.text(difficultyI);
-        option.val(difficultyI);
-        let savedDifficulty = localStorage.getItem('difficultyMastermind');
-        if((savedDifficulty && savedDifficulty === difficultyI)) {
-            option.prop('selected', true);
-            difficulty = difficultyI;
-        } else if(!savedDifficulty) {
-            if (difficultyI === DIFFICULTIES[0]) {
-                option.prop('selected', true);
-                difficulty = difficultyI;
-            }
-        }
-        selectElement.append(option);
-    });
-
     $('#showGamesBtn').click(function() {
         let gamesListDiv = $('#leaderboard');
     
@@ -50,15 +19,6 @@ $(function() {
         } else {
             gamesListDiv.show();
         }
-    });
-
-    $("#difficultySelect").on("change", function() {
-        difficulty = this.value;
-        triesAmount = difficultyTriesAmount[difficulty];
-        numberTriesLeft = triesAmount;
-        localStorage.setItem('difficultyMastermind', difficulty);
-    
-        initialize();
     });
     
     $('.pin').on('dragstart', function(e) {
@@ -73,7 +33,6 @@ $(function() {
         e.preventDefault();
         var id = e.originalEvent.dataTransfer.getData('text/plain');
         var item = $('#' + id);
-        alert('#' + id);
         $(this).append(item);
     });
 
@@ -83,7 +42,7 @@ $(function() {
 });
 
 function initialize() {
-    numberTriesLeft = difficultyTriesAmount[difficulty];
+    // TODO: weghalen omdat je dit zelf kunt zien
     $('#tries-left').text(numberTriesLeft);
     clearInterval(timerInterval);
     $('#timer').text("00:00:00");
