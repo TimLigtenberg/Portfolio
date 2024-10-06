@@ -65,16 +65,39 @@ hr {
     margin: 10px;
 }
 
+.pin {
+    height: 100%;
+}
+
 #pins > img {
     width: 40px;
     cursor: pointer;
 }
 
+.result-row {
+    display: flex;
+}
+
 .dropzone {
-    width: 200px;
-    height: 200px;
+    width: 20%;
+    margin: 2.5%;
+    height: 95%;
     border: 2px dashed #ccc;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.correct {
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    border: 1px black solid;
+}
+
+.misplaced {
+    width: 40px;
+    height: 40px;
+    background-color: black;
+    border: 1px white solid;
 }

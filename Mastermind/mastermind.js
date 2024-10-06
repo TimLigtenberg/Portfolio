@@ -1,8 +1,15 @@
 const wonGamesKey = btoa('wonGamesMastermind');
 
+const DIFFICULTY_EASY = "Easy";
+const DIFFICULTY_NORMAL = "Normal";
+const DIFFICULTY_HARD = "Hard";
+const DIFFICULTIES = [DIFFICULTY_EASY, DIFFICULTY_NORMAL, DIFFICULTY_HARD];
+
 let numberTriesLeft = 10;
 let startTime;
 let timerInterval;
+let code = [];
+let guessCode = [];
 
 $(function() {
     $(window).on('beforeunload', function(){
@@ -25,15 +32,21 @@ $(function() {
         e.originalEvent.dataTransfer.setData('text/plain', this.id);
     });
 
-    $('#dropzone').on('dragover', function(e) {
+    $('.dropzone').on('dragover', function(e) {
         e.preventDefault();
     });
 
-    $('#dropzone').on('drop', function(e) {
+    $('.dropzone').on('drop', function(e) {
         e.preventDefault();
+        if (e.target.hasChildNodes()) {
+            return;
+        }
+
         var id = e.originalEvent.dataTransfer.getData('text/plain');
         var item = $('#' + id);
-        $(this).append(item);
+        $(this).append(item.clone());
+
+        checkCode();
     });
 
     initialize();
@@ -42,37 +55,78 @@ $(function() {
 });
 
 function initialize() {
-    // TODO: weghalen omdat je dit zelf kunt zien
-    $('#tries-left').text(numberTriesLeft);
-    clearInterval(timerInterval);
-    $('#timer').text("00:00:00");
+    $(".dropzone").each(function() {
+        $(this).empty();
+    });
+
+    $("#result").empty();
+
+    generateCode();
 }
 
-function updateTimer() {
-    var elapsedTime = Date.now() - startTime;
-    var hours = Math.floor(elapsedTime / (1000 * 60 * 60));
-    var minutes = Math.floor((elapsedTime % (1000 * 60 * 60)) / (1000 * 60));
-    var seconds = Math.floor((elapsedTime % (1000 * 60)) / 1000);
-    var formattedTime = padNumber(hours) + ':' + padNumber(minutes) + ':' + padNumber(seconds);
-    $('#timer').text(formattedTime);
-}
-function padNumber(number) {
-    return (number < 10 ? '0' : '') + number;
-}
+function generateCode() {
+    let availableNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
-function isTimerLower(timer1, timer2) {
-    var [hours1, minutes1, seconds1] = timer1.split(':').map(Number);
-    var [hours2, minutes2, seconds2] = timer2.split(':').map(Number);
-
-    if (hours1 < hours2) {
-        return true;
-    } else if (hours1 === hours2 && minutes1 < minutes2) {
-        return true;
-    } else if (hours1 === hours2 && minutes1 === minutes2 && seconds1 < seconds2) {
-        return true;
-    } else {
-        return false;
+    // Shuffle the list (using Fisher-Yates algorithm)
+    for (var i = availableNumbers.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = availableNumbers[i];
+        availableNumbers[i] = availableNumbers[j];
+        availableNumbers[j] = temp;
     }
+
+    code = availableNumbers.slice(0, 4);
+
+    console.log("code", code);
+}
+
+function checkCode() {
+    if ($(".dropzone").children().length < 4) return;
+
+    $(".dropzone").each(function(index) {
+        let pin = $(this).children().first();
+        let pinId = pin.attr('data-pinId');
+        guessCode[index] = parseInt(pinId);
+    });
+
+    let correct = 0;
+    let misplaced = 0;
+    for (let i = 0; i < guessCode.length; i++) {
+        if (guessCode[i] === code[i]) {
+            correct++;
+        } else if (code.includes(guessCode[i])) {
+            misplaced++;
+        }
+    }
+
+    if (correct == 4) {
+        gameWon();
+        return;
+    }
+
+    let result = $("#result");
+    for (let i = 0; i < correct; i++) {
+        result.append($('<div class="correct"></div>'));
+    }
+    for (let i = 0; i < misplaced; i++) {
+        result.append($('<div class="misplaced"></div>'));
+    }
+}
+
+function saveGame() {
+    let gamesArray = localStorage.getItem(wonGamesKey) ? JSON.parse(localStorage.getItem(wonGamesKey)) : [];
+    let difficulty = $('#difficulty').val();
+    let time = $('#timer').text();
+    let day = new Date().toLocaleDateString();
+
+    gamesArray.push({difficulty, time, day});
+    localStorage.setItem(wonGamesKey, JSON.stringify(gamesArray));
+}
+
+function gameWon() {
+    saveGame();
+    alert('You won!');
+    initialize();
 }
 
 function setLeaderboard() {
